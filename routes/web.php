@@ -1,6 +1,9 @@
 <?php
 
+use App\Http\Controllers\PaymentController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
 Route::get('/', fn() => Inertia::render('Index'))->name('index');
+
+Route::get('/site1', [PaymentController::class, 'index'])->name('site1');
