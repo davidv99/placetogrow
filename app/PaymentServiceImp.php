@@ -67,6 +67,47 @@ class PaymentServiceImp implements PaymentService
         }
     }
 
+    public function checkPayment(string $reference)
+    {
+        $login = env('P2P_LOGIN');
+        $secretKey = env('P2P_SECRET_KEY');
+        $seed = Carbon::now()->toIso8601String();
+        $rawNonce = Str::random();
+
+        $tranKey = base64_encode(hash('sha256', $rawNonce . $seed . $secretKey, true));
+        $nonce = base64_encode($rawNonce);
+
+        $datos = [
+            'auth' => [
+                'login' => $login,
+                'tranKey' => $tranKey,
+                'seed' => $seed,
+                'nonce' => $nonce,
+            ],
+        ];
+
+        $pago = User::query()->where('payment_reference', $reference)->latest()->first();
+
+        if (!$pago) {
+            return Redirect::to('/site1')->withErrors('No se encontró el pago solicitado.');
+        }
+
+        $resultado = Http::post(env('P2P_URL') . '/api/session/' . $pago->request_id, $datos);
+
+        if ($resultado->ok()) {
+            $this->updatePayment($reference, $resultado->json());
+
+            return Inertia::render('Site1/Return', [
+                'payment' => $pago->refresh(),
+            ]);
+        } else {
+            return Redirect::to('/site1')
+                ->withErrors(
+                    $resultado['status']['message'] ?? 'Ha ocurrido un error al finalizar el pago'
+                );
+        }
+    }
+
     public function createUser($request, $paymentReference, $response)
     {
         User::query()->create([
@@ -85,5 +126,39 @@ class PaymentServiceImp implements PaymentService
             'status_message' => $response['status']['message'],
             'expires_in' => Carbon::create($response['status']['date'])->addMinutes(10),
         ])->save();
+    }
+
+    public function updatePayment($paymentReference, $response)
+    {
+        $pago = User::query()->where('payment_reference', $paymentReference)->latest()->first();
+
+        if ($response['status']['status'] === 'APPROVED') {
+            $pago->update([
+                'internal_reference' => $response['payment'][0]['internalReference'],
+                'franchise' => $response['payment'][0]['franchise'],
+                'payment_method' => $response['payment'][0]['paymentMethod'],
+                'payment_method_name' => $response['payment'][0]['paymentMethodName'],
+                'issuer_name' => $response['payment'][0]['issuerName'],
+                'authorization' => $response['payment'][0]['authorization'],
+                'receipt' => $response['payment'][0]['receipt'],
+                'payment_date' => $response['payment'][0]['status']['date'],
+                'status_message' => $response['payment'][0]['status']['message'],
+                'status' => $response['payment'][0]['status']['status'],
+            ]);
+        } else {
+            if (isset($response['payment'][0])) {
+                $pago->update([
+                    'status_message' => $response['payment'][0]['status']['message'],
+                    'payment_date' => $response['payment'][0]['status']['date'],
+                    'status' => $response['status']['status'],
+                ]);
+            } else {
+                $pago->update([
+                    'status_message' => $response['status']['message'],
+                    'payment_date' => $response['status']['date'],
+                    'status' => $response['status']['status'],
+                ]);
+            }
+        }
     }
 }

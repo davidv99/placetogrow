@@ -36,4 +36,9 @@ class PaymentController extends Controller
 
         return (new PaymentServiceImp)->createPayment($request);
     }
+
+    public function return($reference)
+    {
+        return (new PaymentServiceImp)->checkPayment($reference);
+    }
 }
