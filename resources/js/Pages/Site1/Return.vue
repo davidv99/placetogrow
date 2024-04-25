@@ -12,7 +12,7 @@ defineProps({
             <div class="flex justify-between items-center p-5 border-b-2 text-center">
                 <div>
                     <dt class="text-xl font-semibold text-gray-500">
-                        Detalles de Pago
+                        Detalles del Pago
                     </dt>
                     <dd class="text-xl font-semibold text-gray-700">
                         {{ payment.status_message }}
@@ -40,7 +40,7 @@ defineProps({
 
                 <div>
                     <dt class="text-md font-medium text-gray-500">
-                        Valor pagado
+                        Total
                     </dt>
                     <dd class="mt-1 text-sm text-gray-900 font-semibold">
                         {{ new Intl.NumberFormat().format(payment.valor) }} {{ payment.moneda }}
