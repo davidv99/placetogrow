@@ -13,10 +13,21 @@
 
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
+
+        @yield('header')
+
+        @stack('css')
     </head>
     <body class="font-sans antialiased">
-        <div class="min-h-screen bg-gray-100">
-            @include('layouts.navigation')
+        <!--<div class="min-h-screen bg-gray-100">-->
+            @auth
+                @if(!is_null(Auth::user()->name))
+                    <p>Welcome, {{ Auth::user()->name }}!</p>
+                    @include('layouts.navigation')
+                @endif
+            @else
+                <p>Please log in.</p>
+            @endauth
 
             <!-- Page Heading -->
             @isset($header)
@@ -29,7 +40,7 @@
 
             <!-- Page Content -->
             <main>
-                {{ $slot }}
+                @yield('content')
             </main>
         </div>
     </body>

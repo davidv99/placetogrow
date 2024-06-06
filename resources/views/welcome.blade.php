@@ -1,10 +1,6 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Welcome</title>
-    <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+@extends('layouts.app')
+
+@push('css')
     <style>
         body {
             display: flex;
@@ -27,7 +23,7 @@
         .login-button {
             margin-top: 20px;
             padding: 10px 20px;
-            background-color: #702bd8;
+            background-color: #FF7C06;
             color: white;
             border: none;
             border-radius: 5px;
@@ -35,16 +31,23 @@
             text-decoration: none;
         }
         .login-button:hover {
-            background-color: #16a5b2;
+            background-color: #702bd8;
         }
     </style>
-</head>
-<body>
+@endpush
+
+@section('header')
+    <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome</title>
+@endsection
+
+@section('content')
     <div class="welcome-container">
-        <h1>Welcome to PlaceToGrow Microsites manager</h1>
+        <h1>Welcome to PlaceToGrow Microsites managerr</h1>
         <img src="{{ asset('images/welcome.jpg') }}" alt="Welcome Image" class="welcome-image">
         <br>
         <a href="{{ route('login') }}" class="login-button">Login</a>
     </div>
-</body>
-</html>
+@endsection
