@@ -54,26 +54,32 @@
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12h18M3 6h18M3 18h18" />
                         </svg>
                         <span class="text-2xl font-extrabold">Brand</span>
-                    </a>
-        
+                    </a>         
                     <nav>
-                        <a href="#" class="block py-2.5 px-4 rounded transition duration-200 hover:bg-purple-700 hover:text-white">
+                        @role('admin')
+                        <a href="{{ route('logout') }}" class="block py-2.5 px-4 rounded transition duration-200 hover:bg-purple-700 hover:text-white">
                             <svg class="inline-block w-6 h-6 mr-2 text-orange-500 transition duration-200 group-hover:text-purple-500" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                                 <path d="M10 3a7 7 0 100 14 7 7 0 000-14zm0 12a5 5 0 110-10 5 5 0 010 10zM7 10h6v1H7v-1z" />
                             </svg>
-                            Home
+                            Users
                         </a>
+                        @endrole
                         <a href="#" class="block py-2.5 px-4 rounded transition duration-200 hover:bg-purple-700 hover:text-white">
                             <svg class="inline-block w-6 h-6 mr-2 text-orange-500 transition duration-200 group-hover:text-purple-500" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                                 <path d="M10 3a7 7 0 100 14 7 7 0 000-14zm0 12a5 5 0 110-10 5 5 0 010 10zM7 10h6v1H7v-1z" />
                             </svg>
-                            About
+                            Microsites
                         </a>
                         <!-- Agrega más enlaces aquí -->
                     </nav>
                 </div>
         
                 <!-- Content -->
+                <button id="close-sidebar" class="text-white absolute top-0 right-0 mt-2 mr-3 md:hidden">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
                 <div class="flex-1 p-10 text-2xl font-bold">
                     <button id="menu-toggle" class="bg-gray-800 text-white p-2 rounded-md focus:outline-none md:hidden">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
