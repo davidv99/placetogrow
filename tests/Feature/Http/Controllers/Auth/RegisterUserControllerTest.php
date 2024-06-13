@@ -2,8 +2,6 @@
 
 namespace Tests\Feature\Http\Controllers\Auth;
 
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
 class RegisterUserControllerTest extends TestCase
@@ -13,8 +11,8 @@ class RegisterUserControllerTest extends TestCase
      */
     public function test_example(): void
     {
-        $response = $this->get('/api/auth');
+        $response = $this->get('/api/register');
 
-        $response->assertStatus(200);
+        $response->assertStatus(201);
     }
 }
