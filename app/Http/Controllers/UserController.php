@@ -18,19 +18,29 @@ class UserController extends Controller
         $admin_users = $roles[1]->users;
         $guest_users = $roles[2]->users;
     
-        echo($super_admin_users);
-
         return view('users.index', compact(['super_admin_users', 'admin_users', 'guest_users']));
     }
 
     public function create()
     {
-        //
+        return view('users.create');
     }
 
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|unique:users,email',
+            'password' => 'required|string|min:8',
+        ]);
+
+        $user = new User();
+        $user->name = $request->name;
+        $user->email = $request->email;
+        $user->password = bcrypt($request->password);
+        $user->save();
+
+        return redirect()->route('users.index')->with('success', 'User created successfully!');
     }
 
     public function show(string $id)
