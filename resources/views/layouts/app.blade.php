@@ -2,6 +2,9 @@
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
     <head>
         <script src="https://cdn.tailwindcss.com"></script>
+
+        <link href="{{ mix('css/app.css') }}" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
         
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -46,18 +49,20 @@
                 </header>
             @endisset
 
+            <!-- Page content goes here -->
+            <main>
+            <!-- Sidebar -->
             <div class="flex min-h-screen">
-                <!-- Sidebar -->
                 <div id="sidebar" class="bg-gray-800 text-white w-64 space-y-6 py-7 px-2 absolute inset-y-0 left-0 transform -translate-x-full transition duration-200 ease-in-out md:relative md:translate-x-0">
                     <a href="#" class="text-white flex items-center space-x-2 px-4">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12h18M3 6h18M3 18h18" />
                         </svg>
                         <span class="text-2xl font-extrabold">Brand</span>
-                    </a>         
+                    </a>    
                     <nav>
-                        @role('admin')
-                        <a href="{{ route('logout') }}" class="block py-2.5 px-4 rounded transition duration-200 hover:bg-purple-700 hover:text-white">
+                        @role(['super_admin', 'admin'])
+                        <a href="{{ route('users.index') }}" class="block py-2.5 px-4 rounded transition duration-200 hover:bg-purple-700 hover:text-white">
                             <svg class="inline-block w-6 h-6 mr-2 text-orange-500 transition duration-200 group-hover:text-purple-500" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                                 <path d="M10 3a7 7 0 100 14 7 7 0 000-14zm0 12a5 5 0 110-10 5 5 0 010 10zM7 10h6v1H7v-1z" />
                             </svg>
@@ -73,7 +78,9 @@
                         <!-- Agrega más enlaces aquí -->
                     </nav>
                 </div>
-        
+
+                @yield('content')
+ 
                 <!-- Content -->
                 <button id="close-sidebar" class="text-white absolute top-0 right-0 mt-2 mr-3 md:hidden">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -86,14 +93,10 @@
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
                         </svg>
                     </button>
-                    <!-- Page content goes here -->
-                    <main>
-                        @yield('content')
                     </main>
                 </div>
             </div>
-    </body>
-    
+    </body>    
 </html>
 
 <script>

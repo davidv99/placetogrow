@@ -1,3 +1,29 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* resources/css/app.css */
+
+.table-auto th, .table-auto td {
+    text-align: left;
+}
+
+.table-auto th {
+    background-color: #f9fafb;
+}
+
+.table-auto td a {
+    margin-right: 0.5rem;
+}
+
+.table-auto td form {
+    display: inline;
+}
+
+.table-auto td button {
+    background: none;
+    border: none;
+    color: inherit;
+    padding: 0;
+    cursor: pointer;
+}
