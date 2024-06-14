@@ -9,13 +9,25 @@
 
     @section('content')
         <div class="container mx-auto mt-5 flex flex-col space-y-4">
-            <div class="flex flex-col space-y-4">
+
+            @if (session('status'))
+            <div class="container mx-auto mt-5 flex flex-col space-y-4 items-center">
+                <div class="bg-green-500 text-white p-4 rounded w-1/2 mb-4 text-center">
+                    {{ session('status') }}
+                </div>
+            </div>
+            @endif
+
+            <div class="container mx-auto mt-5 flex flex-col space-y-4 items-center">
+
                 <h1 class="text-2xl font-bold mb-4">Create a new user</h1>
                 <a href="{{ route('users.create') }}" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 w-1/3 sm:w-1/3 md:w-1/4 lg:w-1/5 text-center">Create New User</a>
             </div>
-    
-            <div class="flex flex-col space-y-4">
-                <h1 class="text-2xl font-bold mb-4">Users</h1>
+            <br>
+            <br>
+            <br>
+            <div class="flex flex-col space-y-2">
+                <h1 class="text-2xl font-bold mb-2">Super Admins users</h1>
 
             <!-- Formulario de Búsqueda -->
             <div class="w-1/2 mb-4">
@@ -36,6 +48,7 @@
                             <td class="border border-gray-200 px-4 py-2">{{ $super_admin_user->name }}</td>
                             <td class="border border-gray-200 px-4 py-2">{{ $super_admin_user->email }}</td>
                             <td class="border border-gray-200 px-4 py-2 text-right">
+                                @role(['super_admin'])
                                 <a href="{{ route('users.show', $super_admin_user->id) }}" class="text-blue-600 hover:text-blue-800 mr-2">
                                     <i class="fas fa-eye"></i>
                                 </a>
@@ -49,6 +62,7 @@
                                         <i class="fas fa-trash"></i>
                                     </button>
                                 </form>
+                            @endrole
                             </td>
                         </tr>
                     @endforeach
@@ -58,8 +72,8 @@
                 <br>
             </div>
 
-            <div class="flex flex-col space-y-4">
-                <h1 class="text-2xl font-bold mb-4">Admins users</h1>
+            <div class="flex flex-col space-y-2">
+                <h1 class="text-2xl font-bold mb-2">Admins users</h1>
                 <div class="w-1/2 mb-4">
                     <input type="text" id="search_email_admin_users" placeholder="Search by email" class="border w-full p-2">
                 </div>
@@ -93,8 +107,8 @@
                 <br>
             </div>
 
-            <div class="flex flex-col space-y-4">
-                <h1 class="text-2xl font-bold mb-4">Guest users</h1>
+            <div class="flex flex-col space-y-2">
+                <h1 class="text-2xl font-bold mb-2">Guest users</h1>
                 <div class="w-1/2 mb-4">
                     <input type="text" id="search_email_guest_users" placeholder="Search by email" class="border w-full p-2">
                 </div>

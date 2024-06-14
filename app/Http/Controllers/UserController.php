@@ -6,6 +6,8 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Spatie\Permission\Models\Role;
 
+use function Laravel\Prompts\alert;
+
 class UserController extends Controller
 {
     public function index()
@@ -40,7 +42,10 @@ class UserController extends Controller
         $user->password = bcrypt($request->password);
         $user->save();
 
-        return redirect()->route('users.index')->with('success', 'User created successfully!');
+        $role = Role::findByName($request->role);
+        $user->assignRole($role);
+
+        return redirect()->route('users.index')->with('status', 'User created successfully!');
     }
 
     public function show(string $id)
