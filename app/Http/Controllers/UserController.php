@@ -55,16 +55,37 @@ class UserController extends Controller
 
     public function edit(string $id)
     {
-        //
+        alert("HOLAAAAAA");
+        alert($id);
+
+        $user = User::find($id);
+
+        return view("users.edit", compact('user'));
     }
 
-    public function update(Request $request, string $id)
+    public function update(Request $request, User $user)
     {
-        //
+        $validatedData = $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|max:255|unique:users,email,'.$user->id,
+            'role' => 'required|in:super_admin,admin,guest',
+        ]);
+        alert("HOLAAAAAA");
+    
+        $user->update([
+            'name' => $validatedData['name'],
+            'email' => $validatedData['email'],
+            'role' => $validatedData['role'],
+        ]);
+        alert("ASFA.JDSNFADS.F");
+    
+        return redirect()->route('users.index')->with('success', 'User updated successfully');
     }
 
-    public function destroy(string $id)
+    public function destroy(User $user)
     {
-        //
+        $user->delete();
+
+        return redirect()->route('users.index')->with('status', 'User deleted successfully');
     }
 }
