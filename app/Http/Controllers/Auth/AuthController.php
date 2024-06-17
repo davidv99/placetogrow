@@ -111,6 +111,6 @@ class AuthController extends Controller
         return response()->json([
             'user' => JWTAuth::user(),
             'token' => $token
-        ]);
+        ], 200);
     }
 }
