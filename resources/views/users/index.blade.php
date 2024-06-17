@@ -12,7 +12,7 @@
 
             @if (session('status'))
             <div class="container mx-auto mt-5 flex flex-col space-y-4 items-center">
-                <div class="bg-green-500 text-white p-4 rounded w-1/2 mb-4 text-center">
+                <div class="alert {{ session('class') }} text-white p-4 rounded w-1/2 mb-4 text-center">
                     {{ session('status') }}
                 </div>
             </div>
@@ -92,7 +92,7 @@
                                 <td class="border border-gray-200 px-4 py-2">{{ $admin_user->email }}</td>
                                 <td class="border border-gray-200 px-4 py-2 text-right">
                                     <a href="{{ route('users.show', $admin_user->id) }}" class="text-blue-600 hover:text-blue-800 mr-2"><i class="fas fa-eye"></i></a>
-                                    <a href="{{ route('users.update', $admin_user->id) }}" class="text-yellow-600 hover:text-yellow-800 mr-2"><i class="fas fa-edit"></i></a>
+                                    <a href="{{ route('users.edit', $admin_user->id) }}" class="text-yellow-600 hover:text-yellow-800 mr-2"><i class="fas fa-edit"></i></a>
                                     <form action="{{ route('users.destroy', $admin_user->id) }}" method="POST" class="inline-block">
                                         @csrf
                                         @method('DELETE')

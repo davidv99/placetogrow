@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Spatie\Permission\Models\Role;
 
 use function Laravel\Prompts\alert;
@@ -45,19 +46,21 @@ class UserController extends Controller
         $role = Role::findByName($request->role);
         $user->assignRole($role);
 
-        return redirect()->route('users.index')->with('status', 'User created successfully!');
+        return redirect()->route('users.index')
+            ->with('status', 'User created successfully!')
+            ->with('class', 'bg-green-500');
     }
 
     public function show(string $id)
     {
-        //
+        $user = User::find($id);
+        $role_name = $user->getRoleNames();
+
+        return view("users.show", compact('user', 'role_name'));
     }
 
     public function edit(string $id)
     {
-        alert("HOLAAAAAA");
-        alert($id);
-
         $user = User::find($id);
 
         return view("users.edit", compact('user'));
@@ -68,24 +71,58 @@ class UserController extends Controller
         $validatedData = $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|email|max:255|unique:users,email,'.$user->id,
+            'password' => 'nullable|string|min:8',
             'role' => 'required|in:super_admin,admin,guest',
         ]);
-        alert("HOLAAAAAA");
-    
-        $user->update([
-            'name' => $validatedData['name'],
-            'email' => $validatedData['email'],
-            'role' => $validatedData['role'],
-        ]);
-        alert("ASFA.JDSNFADS.F");
-    
-        return redirect()->route('users.index')->with('success', 'User updated successfully');
+        
+        if (empty($validatedData['password'])) {
+            $user->update([
+                'name' => $validatedData['name'],
+                'email' => $validatedData['email'],
+            ]);
+        }else{
+            $user->update([
+                'name' => $validatedData['name'],
+                'email' => $validatedData['email'],
+                'password' => bcrypt($validatedData['password']),
+            ]);
+        }
+
+        $user->syncRoles([$validatedData['role']]);
+        
+        return redirect()->route('users.index')
+            ->with('status', 'User updated successfully')
+            ->with('class', 'bg-green-500');
     }
 
     public function destroy(User $user)
     {
-        $user->delete();
+        if($this->valide_last_super_admin($user)){
+            $user->delete();
 
-        return redirect()->route('users.index')->with('status', 'User deleted successfully');
+            return redirect()->route('users.index')
+                ->with('status', 'User deleted successfully')
+                ->with('class', 'bg-green-500');
+        }else{
+            return redirect()->route('users.index')
+                ->with('status', 'User not deleted because not exist more super admins users')
+                ->with('class', 'bg-yellow-500');
+        }
+
+    }
+
+    private function valide_last_super_admin($user){
+        $role_name = $user->getRoleNames();
+
+        if($role_name[0] === 'super_admin'){
+            $count = DB::table('model_has_roles')
+            ->where('role_id', 1)
+            ->count();
+            
+            return ($count > 1) ? true : false;
+        }else{
+            return true;
+        }
+        
     }
 }
