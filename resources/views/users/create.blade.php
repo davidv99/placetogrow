@@ -44,9 +44,9 @@
                 <label for="role" class="block text-gray-700 text-sm font-bold mb-2">Role:</label>
                 <select id="role" name="role" class="form-select block w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:border-blue-500 focus:shadow-outline-blue @error('role') border-red-500 @enderror" required>
                     <option value="" disabled selected>Select a role</option>
-                    @role(['super_admin'])
+                    @can(['super_user.options'])
                         <option value="super_admin">Super Admin</option>
-                    @endrole
+                    @endcan
                     <option value="admin">Admin</option>
                     <option value="guest">Guest</option>
                 </select>

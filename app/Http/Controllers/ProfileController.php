@@ -3,11 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ProfileUpdateRequest;
+use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
+
+use function Laravel\Prompts\alert;
 
 class ProfileController extends Controller
 {
@@ -56,5 +59,16 @@ class ProfileController extends Controller
         $request->session()->regenerateToken();
 
         return Redirect::to('/');
+    }
+
+    public function show()
+    {
+        $id = Auth::user()->id;
+        $user = User::find($id);
+        $role_name = $user->getRoleNames();
+        alert($user);
+        $role_name = $user->getRoleNames();
+        alert($role_name);
+        return view("profile.show", compact('user', 'role_name'));
     }
 }
