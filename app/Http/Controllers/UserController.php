@@ -7,12 +7,11 @@ use Illuminate\Http\Request;
 
 class UserController extends Controller
 {
-
     public function index()
     {
         $users = User::all();
 
-        return response()->json(compact('users'),200);
+        return response()->json(compact('users'), 200);
     }
 
     public function show(string $id)
@@ -27,6 +26,6 @@ class UserController extends Controller
 
     public function destroy(string $id)
     {
-        
+
     }
 }
