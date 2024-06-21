@@ -13,7 +13,8 @@ class MicrositesController extends Controller
      */
     public function index()
     {
-        //
+        $microsites = microsites::all();
+        return view('microsites.index', compact('microsites'));
     }
 
     /**

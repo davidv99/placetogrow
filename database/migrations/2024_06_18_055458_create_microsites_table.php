@@ -5,6 +5,7 @@ use App\Constants\DocumentTypes;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\DB;
 
 return new class extends Migration
 {
@@ -22,8 +23,8 @@ return new class extends Migration
             $table->string('logo');
             $table->foreignId('category_id')->constrained();
             $table->enum('currency', array_column(Currency::cases(), 'name'));
-            $table->string('site_type',40);
-            $table->timestamp('enabled_at');
+            $table->string('site_type', 40);
+            $table->timestamp('enabled_at')->nullable()->default(DB::raw('CURRENT_TIMESTAMP'));
             $table->timestamps();
         });
     }
