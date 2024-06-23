@@ -2,9 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Constants\DocumentTypes;
 use App\Models\microsites;
 use App\Http\Requests\StoremicrositesRequest;
 use App\Http\Requests\UpdatemicrositesRequest;
+use App\Models\Category;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Log;
+use App\Actions\Microsites\StoreAction;
 
 class MicrositesController extends Controller
 {
@@ -22,15 +27,25 @@ class MicrositesController extends Controller
      */
     public function create()
     {
-        //
+        Log::info('Creando un nuevo microsite');
+        $categories = Category::query()->select('id', 'name')->get();
+        $documentTypes = DocumentTypes::cases();
+        Log::info('Tipos de documentos:', $documentTypes);
+        return view('microsites.create', compact('categories', 'documentTypes'));
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoremicrositesRequest $request)
+    public function store(StoremicrositesRequest $request, StoreAction $storeAction): RedirectResponse
     {
-        //
+        Log::info('SOTREEEEreando un nuevo microsite');
+        Log::info('Datos recibidos en el formulario:', $request->all());
+        Log::info('Datos validados:', $request->validated());
+        $storeAction->execute($request->validated());
+        // microsites::create($request->validated());
+        return redirect()->route('microsites.index');
+        
     }
 
     /**

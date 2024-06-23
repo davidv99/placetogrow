@@ -10,6 +10,17 @@ class microsites extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        'slug',
+        'name',
+        'document_type',
+        'document_number',
+        'logo',
+        'category_id',
+        'currency',
+        'site_type',
+    ];
+
     public function category(): BelongsTo
     {
         return $this->belongsTo(Category::class);
