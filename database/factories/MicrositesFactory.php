@@ -33,7 +33,7 @@ class MicrositesFactory extends Factory
     public function definition(): array
     {
         return [
-            'slug' => $this->faker->unique()->slug(5),
+            'slug' => fake()->unique()->text(20),
             'name' => $this->faker->company(),
             'document_type' => $this->faker->randomElement(array_column(DocumentTypes::cases(), 'name')),
             'document_number' => $this->faker->numerify('###########'),
