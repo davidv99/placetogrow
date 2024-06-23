@@ -25,7 +25,6 @@ class StoremicrositesRequest extends FormRequest
      */
     public function rules(): array
     {
-        Log::info('Validando datos del formulario:', $this->all());
         return [
             'slug' => 'required|max:50|unique:microsites',
             'name' => 'required|max:100',

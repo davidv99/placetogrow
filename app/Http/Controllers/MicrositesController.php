@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Actions\Microsites\DeleteAction;
 use App\Constants\DocumentTypes;
 use App\Models\microsites;
 use App\Http\Requests\StoremicrositesRequest;
@@ -10,6 +11,9 @@ use App\Models\Category;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Log;
 use App\Actions\Microsites\StoreAction;
+use App\Actions\Microsites\UpdateAction;
+use App\Http\Requests\EditmicrositesRequest;
+use Illuminate\Http\Request;
 
 class MicrositesController extends Controller
 {
@@ -27,10 +31,8 @@ class MicrositesController extends Controller
      */
     public function create()
     {
-        Log::info('Creando un nuevo microsite');
         $categories = Category::query()->select('id', 'name')->get();
         $documentTypes = DocumentTypes::cases();
-        Log::info('Tipos de documentos:', $documentTypes);
         return view('microsites.create', compact('categories', 'documentTypes'));
     }
 
@@ -39,44 +41,38 @@ class MicrositesController extends Controller
      */
     public function store(StoremicrositesRequest $request, StoreAction $storeAction): RedirectResponse
     {
-        Log::info('SOTREEEEreando un nuevo microsite');
-        Log::info('Datos recibidos en el formulario:', $request->all());
-        Log::info('Datos validados:', $request->validated());
         $storeAction->execute($request->validated());
-        // microsites::create($request->validated());
         return redirect()->route('microsites.index');
-        
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(microsites $microsites)
+    public function show(microsites $microsite)
     {
-        //
+        return view('microsites.show', compact('microsite'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(microsites $microsites)
+    public function edit(microsites $microsite, Category $category)
     {
-        //
+        $categories = Category::query()->select('id', 'name')->get();
+        $documentTypes = DocumentTypes::cases();
+
+        return view('microsites.edit', compact('microsite', 'categories', 'documentTypes'));
+    }
+    public function update(UpdatemicrositesRequest $request, microsites $microsite): RedirectResponse
+    {
+        $request->validate([
+            'category_id' => 'required',
+            'slug' => 'required|max:50',
+            'name' => 'required|max:100',
+        ]);
+
+        $microsite->update($request->all());
+        return redirect()->route('microsites.index');
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(UpdatemicrositesRequest $request, microsites $microsites)
-    {
-        //
-    }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(microsites $microsites)
+    public function destroy(microsites $microsite, DeleteAction $deleteAction): RedirectResponse
     {
-        //
+        $deleteAction->execute($microsite);
+        return redirect()->route('microsites.index');
     }
 }
