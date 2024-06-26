@@ -4,13 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Actions\Microsites\DeleteAction;
 use App\Constants\DocumentTypes;
+use App\Constants\PolicyName;
 use App\Models\microsites;
+use App\Models\Category;
 use App\Http\Requests\StoremicrositesRequest;
 use App\Http\Requests\UpdatemicrositesRequest;
-use App\Models\Category;
 use Illuminate\Http\RedirectResponse;
 use App\Actions\Microsites\StoreAction;
-use App\Constants\PolicyName;
 
 class MicrositesController extends Controller
 {
@@ -50,6 +50,7 @@ class MicrositesController extends Controller
 
         return view('microsites.edit', compact('microsite', 'categories', 'documentTypes'));
     }
+
     public function update(UpdatemicrositesRequest $request, microsites $microsite): RedirectResponse
     {
         $this->authorize(PolicyName::UPDATE, $microsite);
@@ -62,7 +63,6 @@ class MicrositesController extends Controller
         $microsite->update($request->all());
         return redirect()->route('microsites.index');
     }
-
 
     public function destroy(microsites $microsite, DeleteAction $deleteAction): RedirectResponse
     {

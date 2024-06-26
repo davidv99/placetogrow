@@ -17,24 +17,25 @@ class DefaultRolesAndPermissionsSeeder extends Seeder
             [
                 'name' => 'Admin',
                 'permissions' => [
-                    PermissionSlug::CATEGORIES_VIEW_ANY,
-                    PermissionSlug::CATEGORIES_CREATE,
-                    PermissionSlug::CATEGORIES_UPDATE,
-                    PermissionSlug::CATEGORIES_DELETE,
-                    PermissionSlug::MICROSITES_VIEW_ANY,
                     PermissionSlug::MICROSITES_VIEW,
                     PermissionSlug::MICROSITES_CREATE,
                     PermissionSlug::MICROSITES_UPDATE,
                     PermissionSlug::MICROSITES_DELETE,
-
+                    PermissionSlug::CATEGORIES_VIEW_ANY,
+                    PermissionSlug::CATEGORIES_VIEW,
+                    PermissionSlug::CATEGORIES_CREATE,
+                    PermissionSlug::CATEGORIES_UPDATE,
+                    PermissionSlug::CATEGORIES_DELETE,
                 ],
             ],
             [
                 'name' => 'Customer',
                 'permissions' => [
-
-                    PermissionSlug::MICROSITES_VIEW,
-
+                    PermissionSlug::CATEGORIES_VIEW_ANY,
+                    PermissionSlug::CATEGORIES_CREATE,
+                    PermissionSlug::CATEGORIES_UPDATE,
+                    PermissionSlug::CATEGORIES_DELETE,
+                    PermissionSlug::MICROSITES_VIEW_ANY,
                 ],
             ],
             [

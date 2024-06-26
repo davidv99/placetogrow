@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Constants;
@@ -10,6 +11,7 @@ final class PermissionSlug
     public const  CATEGORIES_CREATE = 'categories.create';
     public const  CATEGORIES_UPDATE = 'categories.update';
     public const  CATEGORIES_DELETE = 'categories.delete';
+
     public const  MICROSITES_VIEW_ANY = 'microsites.view_any';
     public const  MICROSITES_VIEW = 'microsites.view';
     public const  MICROSITES_CREATE = 'microsites.create';
