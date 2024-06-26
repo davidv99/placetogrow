@@ -4,61 +4,56 @@ namespace App\Http\Controllers;
 
 use App\Actions\Microsites\DeleteAction;
 use App\Constants\DocumentTypes;
+use App\Constants\PolicyName;
 use App\Models\microsites;
+use App\Models\Category;
 use App\Http\Requests\StoremicrositesRequest;
 use App\Http\Requests\UpdatemicrositesRequest;
-use App\Models\Category;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Support\Facades\Log;
 use App\Actions\Microsites\StoreAction;
-use App\Actions\Microsites\UpdateAction;
-use App\Http\Requests\EditmicrositesRequest;
-use Illuminate\Http\Request;
 
 class MicrositesController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
+        $this->authorize(PolicyName::VIEW_ANY, microsites::class);
         $microsites = microsites::all();
         return view('microsites.index', compact('microsites'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
+        $this->authorize(PolicyName::CREATE, microsites::class);
         $categories = Category::query()->select('id', 'name')->get();
         $documentTypes = DocumentTypes::cases();
         return view('microsites.create', compact('categories', 'documentTypes'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(StoremicrositesRequest $request, StoreAction $storeAction): RedirectResponse
     {
+        $this->authorize(PolicyName::CREATE, microsites::class);
         $storeAction->execute($request->validated());
         return redirect()->route('microsites.index');
     }
 
     public function show(microsites $microsite)
     {
+        $this->authorize(PolicyName::VIEW, $microsite);
         return view('microsites.show', compact('microsite'));
     }
 
     public function edit(microsites $microsite, Category $category)
     {
+        $this->authorize(PolicyName::UPDATE, $microsite);
         $categories = Category::query()->select('id', 'name')->get();
         $documentTypes = DocumentTypes::cases();
 
         return view('microsites.edit', compact('microsite', 'categories', 'documentTypes'));
     }
+
     public function update(UpdatemicrositesRequest $request, microsites $microsite): RedirectResponse
     {
+        $this->authorize(PolicyName::UPDATE, $microsite);
         $request->validate([
             'category_id' => 'required',
             'slug' => 'required|max:50',
@@ -69,9 +64,9 @@ class MicrositesController extends Controller
         return redirect()->route('microsites.index');
     }
 
-
     public function destroy(microsites $microsite, DeleteAction $deleteAction): RedirectResponse
     {
+        $this->authorize(PolicyName::DELETE, $microsite);
         $deleteAction->execute($microsite);
         return redirect()->route('microsites.index');
     }
