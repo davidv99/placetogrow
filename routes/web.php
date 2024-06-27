@@ -12,6 +12,7 @@ Route::get('/dashboard', function () {
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
+use App\Http\Controllers\SiteController;
 use App\Http\Controllers\UserController;
 
 Route::get('/login', [AuthenticatedSessionController::class, 'create'])
@@ -27,6 +28,10 @@ Route::middleware('auth')->group(function () {
 
 Route::middleware('auth')->group(function(){
     Route::resource('users', UserController::class);
+});
+
+Route::middleware('auth')->group(function(){
+    Route::resource('sites', SiteController::class);
 });
 
 require __DIR__.'/auth.php';
