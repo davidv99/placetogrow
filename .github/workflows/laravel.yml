@@ -2,7 +2,7 @@ name: ptw_ptp
 
 on:
     push:
-        branches: [featur/cicd]
+        branches: [feature/cicd]
 
 jobs:
     build:
