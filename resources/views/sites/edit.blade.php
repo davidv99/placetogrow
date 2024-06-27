@@ -104,7 +104,7 @@
                 </div>
                 <label for="image">HINT: If you don't select a new image, the image don't change </label>
             </div>
-            <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Update User</button>
+            <button type="submit" class="my-button">Update User</button>
         </form>
     </div>
     @endsection
