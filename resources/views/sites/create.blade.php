@@ -96,7 +96,7 @@
                 </div>
             </div>
     
-            <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Create Site</button>
+            <button type="submit" class="my-button">Create Site</button>
         </form>
     </div>
     @endsection
