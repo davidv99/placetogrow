@@ -60,6 +60,7 @@ class ProfileController extends Controller
         alert($user);
         $role_name = $user->getRoleNames();
         alert($role_name);
-        return view("profile.show", compact('user', 'role_name'));
+
+        return view('profile.show', compact('user', 'role_name'));
     }
 }
