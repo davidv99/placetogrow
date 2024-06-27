@@ -3,25 +3,26 @@
 namespace App\Http\Controllers;
 
 use App\Models\Site;
-use App\Http\Requests\StoreSiteRequest;
-use App\Http\Requests\UpdateSiteRequest;
 use App\Models\Category;
-use App\Models\Image;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
-
-use function Laravel\Prompts\alert;
 
 class SiteController extends Controller
 {
 
     public function index()
     {
-        $sites = Site::whereIn('site_type', ['open', 'close', 'suscription'])
-                    ->with('category:id,name')
-                    ->select('name', 'category_id', 'site_type', 'id')
-                    ->get();
+        $sites = Cache::get('sites.index');
+        if (is_null($sites)) {
+            $sites = Site::whereIn('site_type', ['open', 'close', 'suscription'])
+                ->with('category:id,name')
+                ->select('name', 'category_id', 'site_type', 'id')
+                ->get();
+
+            Cache::put('sites.index', $sites);
+        }
         
         $classifiedSites = [
             'OPEN' => [],
@@ -37,29 +38,16 @@ class SiteController extends Controller
         $close_sites = $classifiedSites['CLOSE'];
         $suscription_sites = $classifiedSites['SUSCRIPTION'];
 
-        //dd($classifiedSites);
-
         return view('sites.index', compact(['open_sites', 'close_sites', 'suscription_sites']));
     }
 
     public function create()
     {
-        $categories = Category::all();
-
-        $enumCurrentValues = DB::select("SHOW COLUMNS FROM sites WHERE Field = 'current_type'")[0]->Type;
-        preg_match('/^enum\((.*)\)$/', $enumCurrentValues, $matches);
-        $current_options = explode(',', $matches[1]);
-        $current_options = array_map(fn($value) => trim($value, "'"), $current_options);
-
-        $enumSiteTypeValues = DB::select("SHOW COLUMNS FROM sites WHERE Field = 'site_type'")[0]->Type;
-        preg_match('/^enum\((.*)\)$/', $enumSiteTypeValues, $matches);
-        $site_type_options = explode(',', $matches[1]);
-        $site_type_options = array_map(fn($value) => trim($value, "'"), $site_type_options);
-
-        $enumDocumentTypeValues = DB::select("SHOW COLUMNS FROM sites WHERE Field = 'document_type'")[0]->Type;
-        preg_match('/^enum\((.*)\)$/', $enumDocumentTypeValues, $matches);
-        $document_types = explode(',', $matches[1]);
-        $document_types = array_map(fn($value) => trim($value, "'"), $document_types);
+        $datos = $this->get_enums();
+        $categories = $datos['categories'];
+        $current_options = $datos['current_options'];
+        $site_type_options = $datos['site_type_options'];
+        $document_types = $datos['document_types'];
 
         return view('sites.create', compact('categories', 'current_options', 'site_type_options', 'document_types'));
     }
@@ -101,31 +89,30 @@ class SiteController extends Controller
 
     public function show(string $id)
     {
-        $site = Site::find($id);
+        $site = Cache::get('site.' . $id);
+        if (is_null($site)) {
+            $site = Site::find($id);
+                        
+            Cache::put('site.' . $id, $site, $minutes=1000);
+        }
 
         return view("sites.show", compact('site'));
     }
 
     public function edit(string $id)
     {
-        $site = Site::find($id);
+        $site = Cache::get('site.' . $id);
+        if (is_null($site)) {
+            $site = Site::find($id);
+                        
+            Cache::put('site.' . $id, $site, $minutes=1000);
+        }
 
-        $categories = Category::all();
-
-        $enumCurrentValues = DB::select("SHOW COLUMNS FROM sites WHERE Field = 'current_type'")[0]->Type;
-        preg_match('/^enum\((.*)\)$/', $enumCurrentValues, $matches);
-        $current_options = explode(',', $matches[1]);
-        $current_options = array_map(fn($value) => trim($value, "'"), $current_options);
-
-        $enumSiteTypeValues = DB::select("SHOW COLUMNS FROM sites WHERE Field = 'site_type'")[0]->Type;
-        preg_match('/^enum\((.*)\)$/', $enumSiteTypeValues, $matches);
-        $site_type_options = explode(',', $matches[1]);
-        $site_type_options = array_map(fn($value) => trim($value, "'"), $site_type_options);
-
-        $enumDocumentTypeValues = DB::select("SHOW COLUMNS FROM sites WHERE Field = 'document_type'")[0]->Type;
-        preg_match('/^enum\((.*)\)$/', $enumDocumentTypeValues, $matches);
-        $document_types = explode(',', $matches[1]);
-        $document_types = array_map(fn($value) => trim($value, "'"), $document_types);
+        $datos = $this->get_enums();
+        $categories = $datos['categories'];
+        $current_options = $datos['current_options'];
+        $site_type_options = $datos['site_type_options'];
+        $document_types = $datos['document_types'];
 
         return view("sites.edit", compact('site', 'categories', 'current_options', 'site_type_options', 'document_types'));
     }
@@ -139,17 +126,12 @@ class SiteController extends Controller
         if ($request->hasFile('image')) {
             if (Storage::exists(str_replace("storage", "public", $site->image))) {
                 Storage::delete(str_replace("storage", "public", $site->image));
-                alert('success ¡Archivo eliminado correctamente!');
             } else {
-                alert('error El archivo no existe o no se pudo eliminar.');
             }
 
             $image = $request->file('image');
             $imageName = $image->getClientOriginalName() . time() . '.' . $image->getClientOriginalExtension();
             $image->storeAs('public/site_images/', $imageName);
-
-            //dd($site);
-            alert($imageName);
 
             $site->update([
                 'slug' => $request['slug'],
@@ -163,7 +145,8 @@ class SiteController extends Controller
                 'image' => 'storage/site_images/' . $imageName,
             ]);
 
-            alert($request['document_type']);
+            Cache::forget('site.' . $site->id);
+            Cache::forget('sites.index');
 
             return redirect()->route('sites.index')
                     ->with('status', 'Site updated successfully')
@@ -180,15 +163,55 @@ class SiteController extends Controller
 
         if (Storage::exists(str_replace("storage", "public", $site->image))) {
             Storage::delete(str_replace("storage", "public", $site->image));
-            alert('success ¡Archivo eliminado correctamente!');
         } else {
-            alert('error El archivo no existe o no se pudo eliminar.');
         }
 
         $site->delete();
 
+        Cache::forget('site.' . $site->id);
+        Cache::forget('users.index');
+
         return redirect()->route('sites.index')
             ->with('status', 'Site deleted successfully')
             ->with('class', 'bg-green-500');
+    }
+
+    public function get_enums(){
+
+        $categories = Cache::get('categories');
+        if (is_null($categories)) {
+            $categories = Category::all();
+                
+            $enumCurrentValues = DB::select("SHOW COLUMNS FROM sites WHERE Field = 'current_type'")[0]->Type;
+            preg_match('/^enum\((.*)\)$/', $enumCurrentValues, $matches);
+            $current_options = explode(',', $matches[1]);
+            $current_options = array_map(fn($value) => trim($value, "'"), $current_options);
+    
+            $enumSiteTypeValues = DB::select("SHOW COLUMNS FROM sites WHERE Field = 'site_type'")[0]->Type;
+            preg_match('/^enum\((.*)\)$/', $enumSiteTypeValues, $matches);
+            $site_type_options = explode(',', $matches[1]);
+            $site_type_options = array_map(fn($value) => trim($value, "'"), $site_type_options);
+    
+            $enumDocumentTypeValues = DB::select("SHOW COLUMNS FROM sites WHERE Field = 'document_type'")[0]->Type;
+            preg_match('/^enum\((.*)\)$/', $enumDocumentTypeValues, $matches);
+            $document_types = explode(',', $matches[1]);
+            $document_types = array_map(fn($value) => trim($value, "'"), $document_types);
+
+            Cache::put('categories', $categories);
+            Cache::put('current_options', $current_options);
+            Cache::put('site_type_options', $site_type_options);
+            Cache::put('document_types', $document_types);
+        }else{
+            $current_options = Cache::get('current_options');
+            $site_type_options = Cache::get('site_type_options');
+            $document_types = Cache::get('document_types');
+        }
+
+        return [
+            'categories' => $categories, 
+            'current_options' => $current_options, 
+            'site_type_options' => $site_type_options,
+            'document_types' => $document_types,
+        ];
     }
 }
