@@ -114,7 +114,7 @@ class UserController extends Controller
                 Cache::put('user.'.$id, $user, $minutes = 1000);
             }
 
-            return view('users.edit', compact('user'));
+            return view('users.edit', compact("user"));
         }
 
         return redirect()->route('dashboard')
