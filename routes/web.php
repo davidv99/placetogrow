@@ -1,9 +1,8 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
-use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\WelcomeController;
-
+use Illuminate\Support\Facades\Route;
 
 Route::get('/', WelcomeController::class);
 
@@ -26,11 +25,11 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'show'])->name('profile.show');
 });
 
-Route::middleware('auth')->group(function(){
+Route::middleware('auth')->group(function () {
     Route::resource('users', UserController::class);
 });
 
-Route::middleware('auth')->group(function(){
+Route::middleware('auth')->group(function () {
     Route::resource('sites', SiteController::class);
 });
 

@@ -19,7 +19,7 @@ class Site extends Model
         'expiration_time',
         'current_type',
         'site_type',
-        'image'
+        'image',
     ];
 
     public function category(): BelongsTo
