@@ -3,14 +3,16 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
+use Illuminate\View\View;
 use Spatie\Permission\Models\Role;
 
 class UserController extends Controller
 {
-    public function index()
+    public function index(): RedirectResponse|View
     {
         if ($this->validate_role()) {
 
@@ -35,7 +37,7 @@ class UserController extends Controller
             ->with('class', 'bg-yellow-500');
     }
 
-    public function create()
+    public function create(): View|RedirectResponse
     {
         if ($this->validate_role()) {
             return view('users.create');
@@ -46,7 +48,7 @@ class UserController extends Controller
             ->with('class', 'bg-red-500');
     }
 
-    public function store(Request $request)
+    public function store(Request $request): RedirectResponse
     {
         if ($this->validate_role()) {
             $request->validate([
@@ -82,7 +84,7 @@ class UserController extends Controller
             ->with('class', 'bg-red-500');
     }
 
-    public function show(string $id)
+    public function show(string $id): View|RedirectResponse
     {
         if ($this->validate_role()) {
 
@@ -103,7 +105,7 @@ class UserController extends Controller
             ->with('class', 'bg-red-500');
     }
 
-    public function edit(string $id)
+    public function edit(string $id): View|RedirectResponse
     {
         if ($this->validate_role()) {
 
@@ -122,7 +124,7 @@ class UserController extends Controller
             ->with('class', 'bg-red-500');
     }
 
-    public function update(Request $request, User $user)
+    public function update(Request $request, User $user): RedirectResponse
     {
         if ($this->validate_role()) {
             $validatedData = $request->validate([
@@ -160,7 +162,7 @@ class UserController extends Controller
             ->with('class', 'bg-red-500');
     }
 
-    public function destroy(User $user)
+    public function destroy(User $user): RedirectResponse
     {
         if ($this->validate_role()) {
             if ($this->valide_last_super_admin($user)) {
@@ -184,7 +186,7 @@ class UserController extends Controller
             ->with('class', 'bg-red-500');
     }
 
-    private function valide_last_super_admin($user)
+    private function valide_last_super_admin(User $user): bool
     {
         $role_name = $user->getRoleNames();
 
@@ -199,7 +201,7 @@ class UserController extends Controller
         }
     }
 
-    private function validate_role()
+    private function validate_role(): bool
     {
         $role_name = User::find(auth()->user()->id)->getRoleNames();
 
