@@ -4,19 +4,24 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Spatie\Permission\Models\Role;
-
-use function Laravel\Prompts\alert;
 
 class UserController extends Controller
 {
     public function index()
     {
         if ($this->validate_role()) {
-            $roles = Role::with(['users' => function($query) {
-                $query->select('users.id', 'users.name', 'users.email', 'role_id');
-            }])->orderBy('id', 'asc')->get();
+
+            $roles = Cache::get('users.index');
+            if (is_null($roles)) {
+                $roles = Role::with(['users' => function($query) {
+                    $query->select('users.id', 'users.name', 'users.email', 'role_id');
+                }])->orderBy('id', 'asc')->get();
+                
+                Cache::put('users.index', $roles);
+            }
             
             $super_admin_users = $roles[0]->users;
             $admin_users = $roles[1]->users;
@@ -56,8 +61,16 @@ class UserController extends Controller
             $user->password = bcrypt($request->password);
             $user->save();
     
-            $role = Role::findByName($request->role);
+            $role = Cache::get('role');
+            if (is_null($role)) {
+                $role = Role::findByName($request->role);
+
+                Cache::put('role', $role);
+            }
+            
             $user->assignRole($role);
+
+            Cache::forget('users.index');
     
             return redirect()->route('users.index')
                 ->with('status', 'User created successfully!')
@@ -72,7 +85,14 @@ class UserController extends Controller
     public function show(string $id)
     {
         if ($this->validate_role()) {
-            $user = User::find($id);
+
+            $user = Cache::get('user.' . $id);
+            if (is_null($user)) {
+                $user = User::find($id);
+                
+                Cache::put('user.' . $id, $user, $minutes=1000);
+            }
+
             $role_name = $user->getRoleNames();
 
             return view("users.show", compact('user', 'role_name'));
@@ -86,8 +106,14 @@ class UserController extends Controller
     public function edit(string $id)
     {
         if ($this->validate_role()) {
-            $user = User::find($id);
-        
+            
+            $user = Cache::get('user.' . $id);
+            if (is_null($user)) {
+                $user = User::find($id);
+                
+                Cache::put('user.' . $id, $user, $minutes=1000);
+            }
+
             return view("users.edit", compact('user'));
         }
 
@@ -118,7 +144,10 @@ class UserController extends Controller
                     'password' => bcrypt($validatedData['password']),
                 ]);
             }
-    
+            
+            Cache::forget('user.' . $user->id);
+            Cache::forget('users.index');
+
             $user->syncRoles([$validatedData['role']]);
             
             return redirect()->route('users.index')
@@ -136,6 +165,9 @@ class UserController extends Controller
         if ($this->validate_role()) {
             if($this->valide_last_super_admin($user)){
                 $user->delete();
+    
+                Cache::forget('user.' . $user->id);
+                Cache::forget('users.index');
     
                 return redirect()->route('users.index')
                     ->with('status', 'User deleted successfully')
