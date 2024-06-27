@@ -8,10 +8,12 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\View\View;
+use Illuminate\Http\RedirectResponse;
 
 class SiteController extends Controller
 {
-    public function index()
+    public function index(): View
     {
         $sites = Cache::get('sites.index');
         if (is_null($sites)) {
@@ -40,7 +42,7 @@ class SiteController extends Controller
         return view('sites.index', compact(['open_sites', 'close_sites', 'suscription_sites']));
     }
 
-    public function create()
+    public function create(): View
     {
         $datos = $this->get_enums();
         $categories = $datos['categories'];
@@ -51,7 +53,7 @@ class SiteController extends Controller
         return view('sites.create', compact('categories', 'current_options', 'site_type_options', 'document_types'));
     }
 
-    public function store(Request $request)
+    public function store(Request $request): RedirectResponse
     {
         $request->validate([
             'image' => 'required|image|max:2048',
@@ -86,7 +88,7 @@ class SiteController extends Controller
             ->with('class', 'bg-red-500');
     }
 
-    public function show(string $id)
+    public function show(string $id): View
     {
         $site = Cache::get('site.'.$id);
         if (is_null($site)) {
@@ -98,7 +100,7 @@ class SiteController extends Controller
         return view('sites.show', compact('site'));
     }
 
-    public function edit(string $id)
+    public function edit(string $id): View
     {
         $site = Cache::get('site.'.$id);
         if (is_null($site)) {
@@ -116,7 +118,7 @@ class SiteController extends Controller
         return view('sites.edit', compact('site', 'categories', 'current_options', 'site_type_options', 'document_types'));
     }
 
-    public function update(Request $request, Site $site)
+    public function update(Request $request, Site $site): RedirectResponse
     {
         $request->validate([
             'image' => 'required|image|max:2048',
@@ -157,7 +159,7 @@ class SiteController extends Controller
             ->with('class', 'bg-red-500');
     }
 
-    public function destroy(Site $site)
+    public function destroy(Site $site): RedirectResponse
     {
         $site->image = str_replace('storage', 'public', $site->image);
 
@@ -176,7 +178,7 @@ class SiteController extends Controller
             ->with('class', 'bg-green-500');
     }
 
-    public function get_enums()
+    public function get_enums(): array
     {
 
         $categories = Cache::get('categories');

@@ -9,7 +9,7 @@ class UserProfilePolicy
 {
     use HandlesAuthorization;
 
-    public function view(User $loggedInUser, User $targetUser)
+    public function view(User $loggedInUser, User $targetUser): bool
     {
         // Verificar si el usuario autenticado es el mismo que el usuario objetivo
         $isOwner = $loggedInUser->id === $targetUser->id;

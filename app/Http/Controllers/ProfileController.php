@@ -52,7 +52,7 @@ class ProfileController extends Controller
         return Redirect::to('/');
     }
 
-    public function show()
+    public function show(): View
     {
         $id = Auth::user()->id;
         $user = User::find($id);
