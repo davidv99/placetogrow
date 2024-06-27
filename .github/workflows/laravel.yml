@@ -2,7 +2,13 @@ name: ptw_ptp
 
 on:
     push:
-        branches: [feature/cicd]
+        branches: 
+            -feature/*
+    
+    pull_request:
+        branches: 
+            - develop
+            - master 
 
 jobs:
     build:
@@ -32,8 +38,8 @@ jobs:
             - name: run composer install
               run: composer install -n --prefer-dist
 
-            #- name: run npm install
-            #  run: npm install 
+            - name: run npm install
+              run: npm install 
 
             #- name: Run test
             #  run: php artisan test
