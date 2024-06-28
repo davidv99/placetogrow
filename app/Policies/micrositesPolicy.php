@@ -10,9 +10,6 @@ use Illuminate\Support\Facades\Log;
 
 class micrositesPolicy
 {
-    /**
-     * Determine whether the user can view any models.
-     */
     public function viewAny(User $user): bool
     {
         return $user->hasPermissionTo(PermissionSlug::MICROSITES_VIEW_ANY);
@@ -41,9 +38,6 @@ class micrositesPolicy
         return $user->hasPermissionTo(PermissionSlug::MICROSITES_DELETE);
     }
 
-    /**
-     * Determine whether the user can restore the model.
-     */
     public function restore(User $user, microsites $microsites): bool
     {
         return $user->hasPermissionTo(PermissionSlug::MICROSITES_UPDATE);

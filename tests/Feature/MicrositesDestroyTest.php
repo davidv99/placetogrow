@@ -2,11 +2,13 @@
 
 namespace Tests\Feature;
 
+use App\Constants\PermissionSlug;
 use App\Models\Category;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use App\Models\User;
 use Tests\TestCase;
 use App\Models\microsites;
+use Spatie\Permission\Models\Permission;
 
 class MicrositesDestroyTest extends TestCase
 {
@@ -32,6 +34,9 @@ class MicrositesDestroyTest extends TestCase
             ->for(Category::factory()->create())
             ->create();
         $user = User::factory()->create();
+        $permission = Permission::firstOrCreate(['name' => PermissionSlug::MICROSITES_DELETE]);
+
+        $user->givePermissionTo($permission);
 
         $response = $this->actingAs($user)
             ->delete(route('microsites.destroy', $microsite));

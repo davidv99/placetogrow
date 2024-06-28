@@ -3,11 +3,13 @@
 namespace Tests\Feature;
 
 use App\Constants\DocumentTypes;
+use App\Constants\PermissionSlug;
 use App\Models\Category;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use App\Models\User;
 use Tests\TestCase;
 use App\Models\microsites;
+use Spatie\Permission\Models\Permission;
 
 class MicrositesUpdateTest extends TestCase
 {
@@ -19,11 +21,40 @@ class MicrositesUpdateTest extends TestCase
         $microsite = microsites::factory()
             ->for($category)
             ->create();
-        
-        // $response = $this->get(route('microsites.edit', $microsite, $category,));
-        // $response->assertRedirect(route('microsites.edit'));
         $response = $this->put(route('microsites.update', $microsite, $category));
         $response->assertRedirect(route('login'));
+    }
+
+
+    public function testItCanUpdateSite(): void
+    {
+        $this->withoutExceptionHandling();
+        //The slug field is required.
+        $category = Category::factory()->create();
+        $microsite = microsites::factory()
+            ->for($category)
+            ->create(
+                [
+                    'name' => 'test-name',
+                    'slug' => 'test-slug',
+                    'document_number' => '123456789',
+                    'category_id' => $category->id,
+                ]
+            );
+        $user = User::factory()->create();
+        $permission = Permission::firstOrCreate(['name' => PermissionSlug::MICROSITES_UPDATE]);
+        $user->givePermissionTo($permission);
+
+        $response = $this->actingAs($user)
+            ->put(route('microsites.update', $microsite->id), [
+                'name' => 'test-name-updated',
+                'slug' => 'test-slug-updated',
+                'document_number' => '123456789',
+                'category_id' => $category->id,
+            ]);
+
+        $response->assertRedirect(route('microsites.index'));
+        
     }
 
     // public function testItCanSeeCreateFormSites(): void

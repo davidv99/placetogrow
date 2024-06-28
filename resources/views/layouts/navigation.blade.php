@@ -13,13 +13,27 @@
                 <!-- Navigation Links -->
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                     <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
-                        {{ __('Dashboard') }}
+                        {{ __('Inicio') }}
                     </x-nav-link>
                 </div>
                 @can(\App\Constants\PermissionSlug::MICROSITES_VIEW_ANY)
                     <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                         <x-nav-link :href="route('microsites.index')" :active="request()->routeIs('microsites.index')">
                             {{ __('Sitios') }}
+                        </x-nav-link>
+                    </div>
+                @endcan
+                @can(\App\Constants\PermissionSlug::MICROSITES_VIEW_ANY)
+                    <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                        <x-nav-link :href="route('rolePermission.index')" :active="request()->routeIs('rolePermission.index')">
+                            {{ __('Usuarios') }}
+                        </x-nav-link>
+                    </div>
+                @endcan
+                @can(\App\Constants\PermissionSlug::MICROSITES_VIEW_ANY)
+                    <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                        <x-nav-link :href="route('rolePermission.permissions')" :active="request()->routeIs('rolePermission.permissions')">
+                            {{ __('Permisos') }}
                         </x-nav-link>
                     </div>
                 @endcan

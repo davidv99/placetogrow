@@ -2,11 +2,13 @@
 
 namespace Tests\Feature;
 
+use App\Constants\PermissionSlug;
 use App\Models\Category;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use App\Models\User;
 use Tests\TestCase;
 use App\Models\microsites;
+use Spatie\Permission\Models\Permission;
 
 class MicrositesStoreTest extends TestCase
 {
@@ -20,7 +22,10 @@ class MicrositesStoreTest extends TestCase
 
     public function testItCanSeeCreateFormSites(): void
     {
-        $response = $this->actingAs($User = User::factory()->create())
+        $user = User::factory()->create();
+        $permission = Permission::firstOrCreate(['name' => PermissionSlug::MICROSITES_CREATE]);
+        $user->givePermissionTo($permission);
+        $response = $this->actingAs($user)
             ->get(route('microsites.create'));
         $response->assertOk();
         $response->assertViewIs('microsites.create');
@@ -33,7 +38,9 @@ class MicrositesStoreTest extends TestCase
             ->for(Category::factory()->create())
             ->make();
         $user = User::factory()->create();
-        #imprimir microservice
+        $permission = Permission::firstOrCreate(['name' => PermissionSlug::MICROSITES_CREATE]);
+        $user->givePermissionTo($permission);
+
         $response = $this->actingAs($user)
             ->post(route('microsites.store'), $microsite->toArray());
 
