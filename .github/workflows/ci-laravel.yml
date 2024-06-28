@@ -1,4 +1,4 @@
-name: laravel-ci-class
+name: Microsites CI
 
 on:
   push:
@@ -22,7 +22,7 @@ jobs:
           - 3306:3306
         env:
           MYSQL_ROOT_PASSWORD: root
-          MYSQL_DATABASE: microsites-test
+          MYSQL_DATABASE: laravel
           MYSQL_USER: root
           MYSQL_PASSWORD: root
         options: >-
@@ -41,6 +41,8 @@ jobs:
         run: php -v
 
       - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
 
       - name: run composer install
         run: composer install -n --prefer-dist
@@ -51,20 +53,12 @@ jobs:
       - name: Generate application key
         run: php artisan key:generate
 
-      - name: Configure database
-        run: |
-          php artisan config:clear
-          php artisan config:cache
-
-      - name: run npm install
-        run: npm install
-
       - name: Set up Node.js
         uses: actions/setup-node@v4.0.2
         with:
           node-version: '20'
-
-      - name: Install Node.js dependencies
+      
+      - name: run npm install
         run: npm install
 
       - name: Build assets
