@@ -3,6 +3,7 @@
 namespace App\Domains\Category\Repositories;
 
 use App\Domains\Category\Models\Category;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
 
 interface CategoryRepository
@@ -12,4 +13,6 @@ interface CategoryRepository
     public function create(array $data): Category;
     public function update(int $id, array $data): bool;
     public function delete(int $id): bool;
+    public function paginate(int $perPage): LengthAwarePaginator;
+
 }

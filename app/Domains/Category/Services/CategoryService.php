@@ -2,9 +2,11 @@
 
 namespace App\Domains\Category\Services;
 
+use App\Constants\Constants;
 use App\Domains\Category\Repositories\CategoryRepository;
 use App\Domains\Category\Models\Category;
-use Illuminate\Support\Collection;
+use Illuminate\Pagination\LengthAwarePaginator;
+
 
 class CategoryService
 {
@@ -15,14 +17,14 @@ class CategoryService
         $this->categoryRepository = $categoryRepository;
     }
 
-    public function getAllCategories(): Collection
+    public function getAllCategories(): LengthAwarePaginator
     {
-        return $this->categoryRepository->all();
+        return $this->categoryRepository->paginate(Constants::RECORDS_PER_PAGE);
     }
 
     public function getCategoryById(int $id): ?Category
     {
-        return $this->categoryRepository.find($id);
+        return $this->categoryRepository->find($id);
     }
 
     public function createCategory(array $data): Category

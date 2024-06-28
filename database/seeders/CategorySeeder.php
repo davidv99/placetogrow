@@ -1,9 +1,9 @@
 <?php
 
+
 namespace Database\Seeders;
 
-use App\Models\Category;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Domains\Category\Models\Category;
 use Illuminate\Database\Seeder;
 
 class CategorySeeder extends Seeder

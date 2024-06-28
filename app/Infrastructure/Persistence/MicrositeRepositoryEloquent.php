@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Infrastructure\Persistence\Eloquent;
+namespace App\Infrastructure\Persistence;
 
 use App\Domains\Microsite\Models\Microsite;
 use App\Domains\Microsite\Repositories\MicrositeRepository;
