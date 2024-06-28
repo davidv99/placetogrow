@@ -9,7 +9,6 @@ class UpdateAction
 {
     public function execute(array $data): microsites
     {
-        Log::info('UpdateAction: ', $data);
         $microsite = new microsites();
         $microsite->category_id = $data['category_id'];
         $microsite->slug = $data['slug'];

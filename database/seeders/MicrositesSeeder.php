@@ -9,9 +9,6 @@ use Illuminate\Database\Seeder;
 
 class MicrositesSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
     public function run(): void
     {
         microsites::factory()

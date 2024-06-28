@@ -18,18 +18,7 @@ class MicrositesFactory extends Factory
      *
      * @return array<string, mixed>
      */
-    // Schema::create('microsites', function (Blueprint $table) {
-    //     $table->id();
-    //     $table->string('slug', 50)->unique();
-    //     $table->string('name', 100);
-    //     $table->enum('document_type', array_column(DocumentTypes::cases(), 'name'));
-    //     $table->string('document_number', 20);
-    //     $table->string('logo');
-    //     $table->foreignId('category_id')->constrained();
-    //     $table->enum('currency', array_column(Currency::cases(), 'name'));
-    //     $table->string('site_type',40);
-    //     $table->timestamp('enabled_at');
-    //     $table->timestamps();
+    
     public function definition(): array
     {
         return [

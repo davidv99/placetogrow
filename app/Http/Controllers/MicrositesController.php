@@ -66,8 +66,9 @@ class MicrositesController extends Controller
 
     public function destroy(microsites $microsite, DeleteAction $deleteAction): RedirectResponse
     {
+        $micrositse = microsites::find($microsite->id);
         $this->authorize(PolicyName::DELETE, $microsite);
-        $deleteAction->execute($microsite);
+        $deleteAction->execute($micrositse);
         return redirect()->route('microsites.index');
     }
 }
