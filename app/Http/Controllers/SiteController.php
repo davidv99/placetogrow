@@ -120,14 +120,9 @@ class SiteController extends Controller
 
     public function update(Request $request, Site $site): RedirectResponse
     {
-        $request->validate([
-            'image' => 'required|image|max:2048',
-        ]);
-
         if ($request->hasFile('image')) {
             if (Storage::exists(str_replace('storage', 'public', $site->image))) {
                 Storage::delete(str_replace('storage', 'public', $site->image));
-            } else {
             }
 
             $image = $request->file('image');
@@ -152,11 +147,26 @@ class SiteController extends Controller
             return redirect()->route('sites.index')
                 ->with('status', 'Site updated successfully')
                 ->with('class', 'bg-green-500');
+        } else {
+            $site->update([
+                'slug' => $request['slug'],
+                'name' => $request['name'],
+                'document_type' => $request['document_type'],
+                'document' => $request['document'],
+                'category_id' => $request['category'],
+                'expiration_time' => $request['expiration_time'],
+                'current_type' => $request['current'],
+                'site_type' => $request['site_type'],
+            ]);
+
+            Cache::forget('site.'.$site->id);
+            Cache::forget('sites.index');
+
+            return redirect()->route('sites.index')
+                ->with('status', 'Site updated successfully')
+                ->with('class', 'bg-green-500');
         }
 
-        return redirect()->route('sites.index')
-            ->with('status', 'Site updated unsuccessfully')
-            ->with('class', 'bg-red-500');
     }
 
     public function destroy(Site $site): RedirectResponse
@@ -165,7 +175,6 @@ class SiteController extends Controller
 
         if (Storage::exists(str_replace('storage', 'public', $site->image))) {
             Storage::delete(str_replace('storage', 'public', $site->image));
-        } else {
         }
 
         $site->delete();
