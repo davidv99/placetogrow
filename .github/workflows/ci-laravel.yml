@@ -66,12 +66,4 @@ jobs:
         run: php artisan migrate
 
       - name: Run tests with coverage
-        run: |
-          mkdir -p tests/_output
-          php artisan test --log-junit tests/_output/test-results.xml --coverage-clover tests/_output/coverage.xml
-
-      - name: Upload Coverage Report
-        uses: actions/upload-artifact@v2
-        with:
-          name: coverage-report
-          path: coverage.xml
+        run: php artisan test --coverage-clover=coverage.xml
