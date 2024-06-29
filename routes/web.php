@@ -4,6 +4,7 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\MicrositesController;
 use App\Http\Controllers\RolePermissionController;
+use App\Http\Controllers\UserController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -28,5 +29,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/role-permission', [RolePermissionController::class, 'managePermissions'])->name('rolePermission.permissions');
     Route::put('/roles/{role}/update-permissions', [RolePermissionController::class, 'editPermissions'])->name('admin.rolePermission.edit-permissions');
 });
+
+Route::middleware('auth')
+    ->resource('users', UserController::class);
 
 require __DIR__ . '/auth.php';

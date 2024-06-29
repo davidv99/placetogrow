@@ -25,7 +25,7 @@
                 @endcan
                 @can(\App\Constants\PermissionSlug::USERS_VIEW_ANY)
                     <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                        <x-nav-link :href="route('rolePermission.index')" :active="request()->routeIs('rolePermission.index')">
+                        <x-nav-link :href="route('users.index')" :active="request()->routeIs('users.index')">
                             {{ __('Usuarios') }}
                         </x-nav-link>
                     </div>
@@ -33,7 +33,7 @@
                 @can(\App\Constants\PermissionSlug::ROLE_PERMISSION_VIEW)
                     <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                         <x-nav-link :href="route('rolePermission.permissions')" :active="request()->routeIs('rolePermission.permissions')">
-                            {{ __('Permisos') }}
+                            {{ __('Roles') }}
                         </x-nav-link>
                     </div>
                 @endcan

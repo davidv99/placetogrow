@@ -11,16 +11,17 @@ class UserPolicy
 {
     public function viewAny(User $user): bool
     {
+        return $user->hasPermissionTo(PermissionSlug::USERS_VIEW_ANY);
+    }
+
+    public function viewAnyPermissions(User $user): bool
+    {
         return $user->hasPermissionTo(PermissionSlug::ROLE_PERMISSION_VIEW);
     }
 
-    public function view(User $user, User $model): bool
-    {
-    }
-
-
     public function create(User $user): bool
     {
+        return $user->hasPermissionTo(PermissionSlug::USERS_CREATE);
     }
 
     public function update(User $user, User $model): bool
@@ -30,6 +31,7 @@ class UserPolicy
 
     public function delete(User $user, User $model): bool
     {
+        return $user->hasPermissionTo(PermissionSlug::USERS_DELETE);
     }
 
 }
