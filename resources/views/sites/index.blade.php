@@ -37,9 +37,9 @@
             <table class="table-auto w-full border-collapse border border-gray-200">
                 <thead>
                     <tr class="bg-gray-100">
-                        <th class="border border-gray-200 px-4 py-2">Name</th>
-                        <th class="border border-gray-200 px-4 py-2">Categories</th>
-                        <th class="border border-gray-200 px-4 py-2">Actions</th>
+                        <th scope="col" class="border border-gray-200 px-4 py-2">Name</th>
+                        <th scope="col" class="border border-gray-200 px-4 py-2">Categories</th>
+                        <th scope="col" class="border border-gray-200 px-4 py-2">Actions</th>
                     </tr>
                 </thead>
                 <tbody id="open_sites_table">
@@ -78,9 +78,9 @@
                 <table class="table-auto w-full border-collapse border border-gray-200">
                     <thead>
                         <tr class="bg-gray-100">
-                            <th class="border border-gray-200 px-4 py-2">Name</th>
-                        <th class="border border-gray-200 px-4 py-2">Categories</th>
-                        <th class="border border-gray-200 px-4 py-2">Actions</th>
+                        <th scope="col" class="border border-gray-200 px-4 py-2">Name</th>
+                        <th scope="col" class="border border-gray-200 px-4 py-2">Categories</th>
+                        <th scope="col" class="border border-gray-200 px-4 py-2">Actions</th>
                         </tr>
                     </thead>
                     <tbody id="close_sites_table">
@@ -113,9 +113,9 @@
                 <table class="table-auto w-full border-collapse border border-gray-200">
                     <thead>
                         <tr class="bg-gray-100">
-                            <th class="border border-gray-200 px-4 py-2">Name</th>
-                        <th class="border border-gray-200 px-4 py-2">Categories</th>
-                        <th class="border border-gray-200 px-4 py-2">Actions</th>
+                        <th scope="col" class="border border-gray-200 px-4 py-2">Name</th>
+                        <th scope="col" class="border border-gray-200 px-4 py-2">Categories</th>
+                        <th scope="col" class="border border-gray-200 px-4 py-2">Actions</th>
                         </tr>
                     </thead>
                     <tbody id="suscription_sites_table">
