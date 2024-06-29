@@ -1,28 +1,28 @@
 <?php
 
-namespace Tests\Feature;
+namespace Tests\Feature\Microsites;
 
 use App\Constants\PermissionSlug;
 use App\Models\Category;
-use App\Models\Microsites;
-use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
-use Spatie\Permission\Models\Permission;
+use App\Models\User;
 use Tests\TestCase;
+use App\Models\Microsites;
+use Spatie\Permission\Models\Permission;
 
-class MicrositesShowTest extends TestCase
+class MicrositesIndexTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function testItCanNotSeeSiteShowWhenUserIsNotAuth(): void
+    public function testItCanNotListSitesWhenUserIsNotAuth(): void
     {
-        $response = $this->get(route('microsites.show', 1));
+        $response = $this->get(route('microsites.index'));
         $response->assertRedirect(route('login'));
     }
 
-    public function testItCanSeeShowSite(): void
+    public function testItCanListSites(): void
     {
+        $this->withoutExceptionHandling();
         Microsites::factory()
             ->for(Category::factory()->create())
             ->create(
@@ -32,13 +32,12 @@ class MicrositesShowTest extends TestCase
                 ]
             );
         $user = User::factory()->create();
-        $permission = Permission::firstOrCreate(['name' => PermissionSlug::MICROSITES_VIEW]);
+        $permission = Permission::firstOrCreate(['name' => PermissionSlug::MICROSITES_VIEW_ANY]);
         $user->givePermissionTo($permission);
-
-        $microsite = Microsites::first();
         $response = $this->actingAs($user)
-            ->get(route('microsites.show', $microsite->id));
+            ->get(route('microsites.index'));
         $response->assertOk();
         $response->assertSee('test-name');
     }
+
 }

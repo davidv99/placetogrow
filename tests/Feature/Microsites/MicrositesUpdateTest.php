@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature;
+namespace Tests\Feature\Microsites;
 
 use App\Constants\DocumentTypes;
 use App\Constants\PermissionSlug;

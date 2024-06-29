@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature;
+namespace Tests\Feature\RolePermissions;
 
 use App\Constants\PermissionSlug;
 use App\Models\User;
