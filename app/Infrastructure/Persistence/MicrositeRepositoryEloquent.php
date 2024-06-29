@@ -4,6 +4,7 @@ namespace App\Infrastructure\Persistence;
 
 use App\Domains\Microsite\Models\Microsite;
 use App\Domains\Microsite\Repositories\MicrositeRepository;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
 
 class MicrositeRepositoryEloquent implements MicrositeRepository
@@ -35,5 +36,10 @@ class MicrositeRepositoryEloquent implements MicrositeRepository
         $microsite = $this->find($id);
 
         return $microsite ? $microsite->delete() : false;
+    }
+
+    public function paginate(int $perPage): LengthAwarePaginator
+    {
+        return Microsite::with('category')->paginate($perPage);
     }
 }

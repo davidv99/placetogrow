@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Domains\Category\Services\CategoryService;
-use Illuminate\Http\Request;
+use App\Http\Requests\CategoryRequest;
 
 class CategoryController extends Controller
 {
@@ -29,12 +29,9 @@ class CategoryController extends Controller
         return inertia('Category/Create');
     }
 
-    public function store(Request $request)
+    public function store(CategoryRequest $request)
     {
-        $validated = $request->validate([
-            'name' => 'required|string|max:30|unique:categories',
-        ]);
-
+        $validated = $request->validated();
         $category = $this->categoryService->createCategory($validated);
 
         return to_route('category.index', $category)->with('success', 'Category was created');
@@ -54,12 +51,9 @@ class CategoryController extends Controller
         return inertia('Category/Edit', ['category' => $category]);
     }
 
-    public function update(Request $request, int $id)
+    public function update(CategoryRequest $request, int $id)
     {
-        $validated = $request->validate([
-            'name' => 'required|string|max:255|unique:categories',
-        ]);
-
+        $validated = $request->validated();
         $this->categoryService->updateCategory($id, $validated);
 
         return to_route('category.index')->with('success', 'Category was updated');
