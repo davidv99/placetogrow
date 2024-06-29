@@ -5,7 +5,8 @@ on:
     branches:
       - main
       - develop
-      - feature/implement-ci-github-actions
+      - feat/user-role-management
+      - feature/*
   pull_request:
     branches:
       - main
@@ -29,24 +30,23 @@ jobs:
           --health-timeout=5s
           --health-retries=3
     steps:
-      - name: Setup PHP
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: 8.3
-          extensions: json, dom, curl, libxml, mbstring
-
-      - name: Check PHP
-        run: php -v
-
       - uses: actions/checkout@v2
         with:
           fetch-depth: 0
 
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: 8.3
+
+      - name: Check PHP
+        run: php -v
+
       - name: run composer install
-        run: composer install -n --prefer-dist
+        run: composer install
 
       - name: Copy
-        run: php -r "file_exists('.env') || copy('.env.example', '.env');"
+        run: cp .env.example .env
 
       - name: Generate application key
         run: php artisan key:generate
@@ -63,13 +63,7 @@ jobs:
         run: npm run build
 
       - name: Migrate database
-        run: php artisan migrate --force
+        run: php artisan migrate
 
       - name: Run tests with coverage
         run: php artisan test --coverage-clover=coverage.xml
-
-      - name: Upload Coverage Report
-        uses: actions/upload-artifact@v2
-        with:
-          name: coverage-report
-          path: coverage.xml

@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Actions\Microsites\DeleteAction;
 use App\Constants\DocumentTypes;
 use App\Constants\PolicyName;
-use App\Models\microsites;
+use App\Models\Microsites;
 use App\Models\Category;
 use App\Http\Requests\StoremicrositesRequest;
 use App\Http\Requests\UpdatemicrositesRequest;
@@ -16,14 +16,14 @@ class MicrositesController extends Controller
 {
     public function index()
     {
-        $this->authorize(PolicyName::VIEW_ANY, microsites::class);
-        $microsites = microsites::all();
+        $this->authorize(PolicyName::VIEW_ANY, Microsites::class);
+        $microsites = Microsites::all();
         return view('microsites.index', compact('microsites'));
     }
 
     public function create()
     {
-        $this->authorize(PolicyName::CREATE, microsites::class);
+        $this->authorize(PolicyName::CREATE, Microsites::class);
         $categories = Category::query()->select('id', 'name')->get();
         $documentTypes = DocumentTypes::cases();
         return view('microsites.create', compact('categories', 'documentTypes'));
@@ -31,7 +31,7 @@ class MicrositesController extends Controller
 
     public function store(StoremicrositesRequest $request, StoreAction $storeAction): RedirectResponse
     {
-        $this->authorize(PolicyName::CREATE, microsites::class);
+        $this->authorize(PolicyName::CREATE, Microsites::class);
         $storeAction->execute($request->validated());
         return redirect()->route('microsites.index');
     }
@@ -66,8 +66,9 @@ class MicrositesController extends Controller
 
     public function destroy(microsites $microsite, DeleteAction $deleteAction): RedirectResponse
     {
+        $micrositse = Microsites::find($microsite->id);
         $this->authorize(PolicyName::DELETE, $microsite);
-        $deleteAction->execute($microsite);
+        $deleteAction->execute($micrositse);
         return redirect()->route('microsites.index');
     }
 }

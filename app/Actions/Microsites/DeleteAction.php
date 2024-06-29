@@ -2,12 +2,12 @@
 
 namespace App\Actions\Microsites;
 
-use App\Models\microsites;
+use App\Models\Microsites;
 use Illuminate\Support\Facades\Log;
 
 class DeleteAction
 {
-    public function execute(microsites $microsites): void
+    public function execute(Microsites $microsites): void
     {
         $microsites->delete();
     }

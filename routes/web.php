@@ -3,6 +3,7 @@
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\MicrositesController;
+use App\Http\Controllers\RolePermissionController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -21,4 +22,11 @@ Route::middleware('auth')->group(function () {
 Route::middleware('auth')
     ->resource('microsites', MicrositesController::class);
 
-require __DIR__.'/auth.php';
+Route::middleware('auth')->group(function () {
+    Route::get('/role-user', [RolePermissionController::class, 'index'])->name('rolePermission.index');
+    Route::put('/role-user/{user}/update', [RolePermissionController::class, 'update'])->name('admin.users.update');
+    Route::get('/role-permission', [RolePermissionController::class, 'managePermissions'])->name('rolePermission.permissions');
+    Route::put('/roles/{role}/update-permissions', [RolePermissionController::class, 'editPermissions'])->name('admin.rolePermission.edit-permissions');
+});
+
+require __DIR__ . '/auth.php';

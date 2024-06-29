@@ -2,13 +2,13 @@
 
 namespace App\Actions\Microsites;
 
-use App\Models\microsites;
+use App\Models\Microsites;
 
 class StoreAction
 {
-    public function execute(array $data): microsites
+    public function execute(array $data): Microsites
     {
-        $microsite = new microsites();
+        $microsite = new Microsites();
         $microsite->category_id = $data['category_id'];
         $microsite->slug = $data['slug'];
         $microsite->name = $data['name'];
