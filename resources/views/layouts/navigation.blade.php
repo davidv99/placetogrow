@@ -9,38 +9,22 @@
                         <x-application-logo class="block h-9 w-auto fill-current text-gray-800" />
                     </a>
                 </div>
-
-                <!-- Navigation Links -->
-                <!-- <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                    <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
-                        {{ __('Dashboard') }}
-                    </x-nav-link>
-                </div>
-                @role(['super_admin', 'admin'])
-                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                    <x-nav-link :href="route('users.index')" :active="request()->routeIs('users.index')">
-                        {{ __('Users') }}
-                    </x-nav-link>
-                </div>
-                @endrole-->
-
             </div>
 
             <!-- Settings Dropdown -->
-            <div class="hidden sm:flex sm:items-center sm:ms-6">
-                <x-dropdown-link :href="route('profile.show')">
-                    {{ __('Profile') }}
-                </x-dropdown-link>
+            <div class="hidden sm:flex sm:items-center sm:ms-6 mt-3">
+                <form action="{{ route('profile.show') }}" method="POST" class="max-w-lg mx-auto mt-5">
+                    @csrf
+                    @method('GET')
+                    <button type="submit" class="my-button">My profile</i></button>
+                </form>
 
                 <!-- Authentication -->
-                <form method="POST" action="{{ route('logout') }}">
+                <form method="POST" action="{{ route('logout') }}" class="max-w-lg mx-auto mt-5 ml-5">
                     @csrf
 
-                    <x-dropdown-link :href="route('logout')"
-                            onclick="event.preventDefault();
-                                        this.closest('form').submit();">
-                        {{ __('Log Out') }}
-                    </x-dropdown-link>
+                    <button type="submit" class="my-button" onclick="event.preventDefault();
+                                        this.closest('form').submit();">Log out</i></button>
                 </form>
             </div>
         </div>

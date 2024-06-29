@@ -6,7 +6,9 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
     <title>Edit Site</title>
+
     </x-slot>
 
     @section('content')
@@ -104,7 +106,8 @@
                 </div>
                 <label for="image">HINT: If you don't select a new image, the image don't change </label>
             </div>
-            <button type="submit" class="my-button">Update Site</button>
+
+            <button type="submit" class="my-button">Update site</button>
         </form>
     </div>
     @endsection
