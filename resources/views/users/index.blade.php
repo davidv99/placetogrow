@@ -49,7 +49,7 @@
                             <td class="border border-gray-200 px-4 py-2">{{ $super_admin_user->name }}</td>
                             <td class="border border-gray-200 px-4 py-2">{{ $super_admin_user->email }}</td>
                             <td class="border border-gray-200 px-4 py-2 text-right">
-                                @can(['user.edit'])
+                                @can(['super_user.options'])
                                 <a href="{{ route('users.show', $super_admin_user->id) }}" class="text-blue-600 hover:text-blue-800 mr-2">
                                     <i class="fas fa-eye"></i>
                                 </a>
