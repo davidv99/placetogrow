@@ -8,7 +8,7 @@ use App\Models\Microsites;
 use Illuminate\Auth\Access\Response;
 use Illuminate\Support\Facades\Log;
 
-class micrositesPolicy
+class MicrositesPolicy
 {
     public function viewAny(User $user): bool
     {
