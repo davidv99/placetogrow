@@ -4,7 +4,7 @@ namespace Tests\Feature;
 
 use App\Constants\PermissionSlug;
 use App\Models\Category;
-use App\Models\microsites;
+use App\Models\Microsites;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -23,7 +23,7 @@ class MicrositesShowTest extends TestCase
 
     public function testItCanSeeShowSite(): void
     {
-        microsites::factory()
+        Microsites::factory()
             ->for(Category::factory()->create())
             ->create(
                 [
@@ -35,7 +35,7 @@ class MicrositesShowTest extends TestCase
         $permission = Permission::firstOrCreate(['name' => PermissionSlug::MICROSITES_VIEW]);
         $user->givePermissionTo($permission);
 
-        $microsite = microsites::first();
+        $microsite = Microsites::first();
         $response = $this->actingAs($user)
             ->get(route('microsites.show', $microsite->id));
         $response->assertOk();

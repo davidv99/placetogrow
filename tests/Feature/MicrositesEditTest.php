@@ -4,7 +4,7 @@ namespace Tests\Feature;
 
 use App\Constants\PermissionSlug;
 use App\Models\Category;
-use App\Models\microsites;
+use App\Models\Microsites;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -24,7 +24,7 @@ class MicrositesEditTest extends TestCase
     public function testItCanEditSite(): void
     {
         $this->withoutExceptionHandling();
-        $microsite = microsites::factory()
+        $microsite = Microsites::factory()
             ->for(Category::factory()->create())
             ->create(
                 [
@@ -44,7 +44,7 @@ class MicrositesEditTest extends TestCase
 
     // public function testItCanNotEditSiteWhenUserHasNoPermission(): void
     // {
-    //     $microsite = microsites::factory()
+    //     $microsite = Microsites::factory()
     //         ->for(Category::factory()->create())
     //         ->create(
     //             [
@@ -57,7 +57,7 @@ class MicrositesEditTest extends TestCase
     //     $user->givePermissionTo($permission);
 
     //     $response = $this->actingAs($user)
-    //         ->get(route('microsites.edit', $microsite->id));
+    //         ->get(route('Microsites.edit', $microsite->id));
     //     $response->assertForbidden();
     // }
 }

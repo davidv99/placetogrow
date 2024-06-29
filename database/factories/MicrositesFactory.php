@@ -9,7 +9,7 @@ use App\Constants\Currency;
 use App\Models\Category;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\microsites>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Microsites>
  */
 class MicrositesFactory extends Factory
 {

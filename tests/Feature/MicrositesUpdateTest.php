@@ -8,7 +8,7 @@ use App\Models\Category;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use App\Models\User;
 use Tests\TestCase;
-use App\Models\microsites;
+use App\Models\Microsites;
 use Spatie\Permission\Models\Permission;
 
 class MicrositesUpdateTest extends TestCase
@@ -18,7 +18,7 @@ class MicrositesUpdateTest extends TestCase
     public function testItCanNotSeeSiteUpdateWhenUserIsNotAuth(): void
     {
         $category = Category::factory()->create();
-        $microsite = microsites::factory()
+        $microsite = Microsites::factory()
             ->for($category)
             ->create();
         $response = $this->put(route('microsites.update', $microsite, $category));
@@ -31,7 +31,7 @@ class MicrositesUpdateTest extends TestCase
         $this->withoutExceptionHandling();
         //The slug field is required.
         $category = Category::factory()->create();
-        $microsite = microsites::factory()
+        $microsite = Microsites::factory()
             ->for($category)
             ->create(
                 [
@@ -68,7 +68,7 @@ class MicrositesUpdateTest extends TestCase
     // public function testItCanStoreSite(): void
     // {
     //     $this->withoutExceptionHandling();
-    //     $microsite = microsites::factory()
+    //     $microsite = Microsites::factory()
     //         ->for(Category::factory()->create())
     //         ->make();
     //     $user = User::factory()->create();

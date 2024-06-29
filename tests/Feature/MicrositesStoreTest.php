@@ -7,7 +7,7 @@ use App\Models\Category;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use App\Models\User;
 use Tests\TestCase;
-use App\Models\microsites;
+use App\Models\Microsites;
 use Spatie\Permission\Models\Permission;
 
 class MicrositesStoreTest extends TestCase
@@ -34,7 +34,7 @@ class MicrositesStoreTest extends TestCase
     public function testItCanStoreSite(): void
     {
         $this->withoutExceptionHandling();
-        $microsite = microsites::factory()
+        $microsite = Microsites::factory()
             ->for(Category::factory()->create())
             ->make();
         $user = User::factory()->create();

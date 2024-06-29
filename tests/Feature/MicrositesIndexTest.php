@@ -7,7 +7,7 @@ use App\Models\Category;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use App\Models\User;
 use Tests\TestCase;
-use App\Models\microsites;
+use App\Models\Microsites;
 use Spatie\Permission\Models\Permission;
 
 class MicrositesIndexTest extends TestCase
@@ -23,7 +23,7 @@ class MicrositesIndexTest extends TestCase
     public function testItCanListSites(): void
     {
         $this->withoutExceptionHandling();
-        microsites::factory()
+        Microsites::factory()
             ->for(Category::factory()->create())
             ->create(
                 [

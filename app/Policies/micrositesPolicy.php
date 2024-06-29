@@ -4,7 +4,7 @@ namespace App\Policies;
 
 use App\Constants\PermissionSlug;
 use App\Models\User;
-use App\Models\microsites;
+use App\Models\Microsites;
 use Illuminate\Auth\Access\Response;
 use Illuminate\Support\Facades\Log;
 
@@ -16,7 +16,7 @@ class micrositesPolicy
     }
 
  
-    public function view(User $user, microsites $microsites): bool
+    public function view(User $user, Microsites $microsites): bool
     {
         return $user->hasPermissionTo(PermissionSlug::MICROSITES_VIEW);
     }
@@ -28,17 +28,17 @@ class micrositesPolicy
     }
 
 
-    public function update(User $user, microsites $microsites): bool
+    public function update(User $user, Microsites $microsites): bool
     {
         return $user->hasPermissionTo(PermissionSlug::MICROSITES_UPDATE);
     }
 
-    public function delete(User $user, microsites $microsites): bool
+    public function delete(User $user, Microsites $microsites): bool
     {
         return $user->hasPermissionTo(PermissionSlug::MICROSITES_DELETE);
     }
 
-    public function restore(User $user, microsites $microsites): bool
+    public function restore(User $user, Microsites $microsites): bool
     {
         return $user->hasPermissionTo(PermissionSlug::MICROSITES_UPDATE);
     }
