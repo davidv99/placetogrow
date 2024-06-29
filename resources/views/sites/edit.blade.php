@@ -1,17 +1,17 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Edit user') }}
+            {{ __('Edit site') }}
         </h2>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Create User</title>
+    <title>Create site</title>
     </x-slot>
 
     @section('content')
     <div class="container mx-auto mt-5  flex-col space-y-4 items-center">
-        <h1 class="text-2xl font-bold mb-4 flex flex-col items-center">Edit User</h1>
+        <h1 class="text-2xl font-bold mb-4 flex flex-col items-center">Edit site</h1>
         <form action="{{ route('sites.update', $site->id) }}" method="POST" class="max-w-lg mx-auto mt-5" enctype="multipart/form-data">
             @csrf
             @method('PUT')
@@ -104,7 +104,7 @@
                 </div>
                 <label for="image">HINT: If you don't select a new image, the image don't change </label>
             </div>
-            <button type="submit" class="my-button">Update User</button>
+            <button type="submit" class="my-button">Update site</button>
         </form>
     </div>
     @endsection
