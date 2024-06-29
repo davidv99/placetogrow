@@ -6,7 +6,9 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 use League\CommonMark\Node\Block\Document;
 use App\Constants\DocumentTypes;
 use App\Constants\Currency;
+use App\Constants\MicrositesTypes;
 use App\Models\Category;
+use App\Models\User;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Microsites>
@@ -29,8 +31,9 @@ class MicrositesFactory extends Factory
             'logo' => $this->faker->imageUrl(),
             'category_id' => Category::all()->random()->id,
             'currency' => $this->faker->randomElement(array_column(Currency::cases(), 'name')),
-            'site_type' => $this->faker->randomElement(['Invoice', 'Donation', 'Suscription']),
-            
+            'payment_expiration' => $this->faker->numberBetween(1, 30),
+            'user_id' => User::factory()->create()->id,
+            'site_type' => $this->faker->randomElement(array_column(MicrositesTypes::cases(), 'name')),
         ];
     }
 }

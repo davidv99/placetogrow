@@ -11,6 +11,9 @@ use App\Http\Requests\StoremicrositesRequest;
 use App\Http\Requests\UpdatemicrositesRequest;
 use Illuminate\Http\RedirectResponse;
 use App\Actions\Microsites\StoreAction;
+use App\Constants\Currency;
+use App\Constants\MicrositesTypes;
+use Illuminate\Support\Facades\Auth;
 
 class MicrositesController extends Controller
 {
@@ -26,14 +29,18 @@ class MicrositesController extends Controller
         $this->authorize(PolicyName::CREATE, Microsites::class);
         $categories = Category::query()->select('id', 'name')->get();
         $documentTypes = DocumentTypes::cases();
-        return view('microsites.create', compact('categories', 'documentTypes'));
+        $currencies = Currency::cases();
+        $micrositesTypes = MicrositesTypes::cases();
+        return view('microsites.create', compact('categories', 'documentTypes', 'currencies', 'micrositesTypes'));
     }
 
     public function store(StoremicrositesRequest $request, StoreAction $storeAction): RedirectResponse
     {
         $this->authorize(PolicyName::CREATE, Microsites::class);
-        $storeAction->execute($request->validated());
-        return redirect()->route('microsites.index');
+        $data = $request->validated();
+        $data['user_id'] = Auth::id();
+        $storeAction->execute($data);
+        return redirect()->route('microsites.index')->with('success', 'Sitio creado correctamente.');
     }
 
     public function show(microsites $microsite)
