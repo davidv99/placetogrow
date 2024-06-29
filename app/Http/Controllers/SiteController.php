@@ -166,7 +166,6 @@ class SiteController extends Controller
                 ->with('status', 'Site updated successfully')
                 ->with('class', 'bg-green-500');
         }
-
     }
 
     public function destroy(Site $site): RedirectResponse
