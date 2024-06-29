@@ -1,0 +1,60 @@
+name: ptw_ptp
+
+on:
+    push:
+        branches: 
+            [feature/*]
+    
+    pull_request:
+        types: [opened, synchronize]
+        branches:
+            - develop
+            - master
+
+jobs:
+    build:
+        runs-on: ubuntu-latest
+
+        strategy:
+            matrix:
+                php-version: ['8.3']
+
+        steps:
+            - name: Setup PHP
+              uses: shivammathur/setup-php@v2
+              with:
+                php-version: 8.3
+                extensions: json, dom, curl, libxml, mbstring
+                coverage: none
+
+            - name: Check PHP
+              run: php -v
+
+            - uses: actions/checkout@v2
+            
+            - name: Copy .env
+              run: php -r "file_exists('.env') || copy('.env.example', '.env');"
+
+            - name: Copy phpstan
+              run: php -r "file_exists('phpstan.neon') || copy('phpstan.neon', 'phpstan.neon');" 
+
+            - name: run composer install
+              run: composer install -n --prefer-dist
+
+            - name: run npm install
+              run: npm install 
+
+            #- name: Run test
+            #  run: php artisan test
+            
+            - name: Run laravel print
+              run: ./vendor/bin/pint
+
+            - name: Run laravel phpstan
+              run: ./vendor/bin/phpstan analyse
+
+            - name: Run script
+              run: |
+                echo "Hola mundo"
+                ls
+                echo "Fin"

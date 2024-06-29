@@ -27,7 +27,7 @@
             <div class="mb-4">
                 <label class="block mb-2 font-bold w-full px-4 py-3">Role: {{ old('role', $role_name[0]) }}</label>
             </div>
-            <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-red-600"><i class="fas fa-trash"></i></button>
+            <button type="submit" class="my-button"><i class="fas fa-trash"></i></button>
         </form>
     </div>
     @endsection

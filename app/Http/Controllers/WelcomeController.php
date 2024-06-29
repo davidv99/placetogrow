@@ -2,12 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\View\View;
 
 class WelcomeController extends Controller
 {
-    public function __invoke()
+    public function __invoke(): View
     {
+        Cache::flush();
+
         return view('welcome');
     }
 }
