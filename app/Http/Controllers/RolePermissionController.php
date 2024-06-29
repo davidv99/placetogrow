@@ -16,7 +16,7 @@ class RolePermissionController extends Controller
 {
     public function index()
     {
-        $this->authorize(PolicyName::VIEW_ANY, User::class);
+        $this->authorize(PolicyName::VIEW_ANY_PERMISSIONS, User::class);
         $users = User::all();
         $roles = Role::all();
         return view('admin.rolePermission.index', compact('users', 'roles'));
@@ -24,7 +24,7 @@ class RolePermissionController extends Controller
 
     public function managePermissions()
     {
-        $this->authorize(PolicyName::VIEW_ANY, User::class);
+        $this->authorize(PolicyName::VIEW_ANY_PERMISSIONS, User::class);
         $roles = Role::all();
         $permissions = Permission::all();
         $rolesHasPermissions = Role::with('permissions')->get();
