@@ -10,7 +10,7 @@ class CategoryController extends Controller
 {
     public function index(): View
     {
-        return view("users.index");
+        return view('users.index');
     }
 
     public function create()
