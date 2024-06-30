@@ -2,13 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User;
+use App\Http\PersistantsLowLevel\RolePll;
 use App\Http\PersistantsLowLevel\UserPll;
+use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
-use App\Http\Controllers\Controller;
-use App\Http\PersistantsLowLevel\RolePll;
 
 class UserController extends Controller
 {
@@ -87,7 +86,7 @@ class UserController extends Controller
         if ($this->validate_role()) {
             $userData = UserPll::get_specific_user($id);
             RolePll::forget_cache('users.roles');
-            
+
             return view('users.edit', ['user' => $userData['user']]);
         }
 
@@ -110,16 +109,16 @@ class UserController extends Controller
                 $data = [
                     'name' => $validatedData['name'],
                     'email' => $validatedData['email'],
-                    'role' => $validatedData['role']
+                    'role' => $validatedData['role'],
                 ];
-                
+
                 $user = UserPll::update_user_without_password($user, $data);
             } else {
                 $data = [
                     'name' => $validatedData['name'],
                     'email' => $validatedData['email'],
                     'password' => bcrypt($validatedData['password']),
-                    'role' => $validatedData['role']
+                    'role' => $validatedData['role'],
                 ];
 
                 $user = UserPll::update_user_with_password($user, $data);

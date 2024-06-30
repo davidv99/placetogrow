@@ -2,24 +2,21 @@
 
 namespace App\Http\PersistantsLowLevel;
 
+use App\Models\Category;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Spatie\Permission\Models\Role;
 
-class RolePll extends PersistantLowLevel
+class CategoryPll extends PersistantLowLevel
 {
-    public static function get_all_users_roles()
+    public static function get_all_categories()
     {
-        $roles = Cache::get('users.roles');
-        if (is_null($roles)) {
-            $roles = Role::with(['users' => function ($query) {
-                $query->select('users.id', 'users.name', 'users.email', 'role_id');
-            }])->orderBy('id', 'asc')->get();
+        return Category::all();
+    }
 
-            Cache::put('users.roles', $roles);
-        }
-
-        return $roles;
+    public static function get_cache(string $name)
+    {
+        return Cache::get($name);
     }
 
     public static function get_specific_role(string $role_name)
