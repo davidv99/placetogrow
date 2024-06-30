@@ -1,8 +1,9 @@
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { Head, useForm } from "@inertiajs/react";
 import Form from "./Components/Form";
+import { EditProps } from "@/types/category";
 
-export default function Edit({ auth, category }) {
+export default function Edit({ auth, category }: Readonly<EditProps>) {
     const { data, setData, put, errors } = useForm({
         name: category.name || "",
     });

@@ -4,13 +4,27 @@ import InputLabel from "@/Components/InputLabel";
 import TextInput from "@/Components/TextInput";
 import SelectInput from "@/Components/SelectInput";
 import { Link } from "@inertiajs/react";
+import { MicrositeFormProps } from '@/types/microsite';
 
-const transformOptions = (options) => {
-    return options.map(option => ({ id: option, name: option }));
-};
+const transformOptions = (options: string[]) => {
+    return options.map((option) => ({
+        id: option,
+        name: option
+    }));
+}
 
-export default function MicrositeForm({ data, setData, errors, onSubmit, isEditing, categories, types, currency }) {
-    let logoUrl = null;
+export default function MicrositeForm({
+    data,
+    setData,
+    errors,
+    onSubmit,
+    isEditing,
+    categories,
+    types,
+    currency
+}: Readonly<MicrositeFormProps>) {
+
+    let logoUrl: string | null = null;
 
     useEffect(() => {
         return () => {
@@ -31,8 +45,6 @@ export default function MicrositeForm({ data, setData, errors, onSubmit, isEditi
 
     const transformedTypes = transformOptions(types);
     const transformedCurrencies = transformOptions(currency);
-    console.log(transformedTypes);
-    console.log(transformedCurrencies);
 
     return (
         <form onSubmit={onSubmit} className="p-4 sm:p-8 shadow sm:rounded-lg" encType="multipart/form-data">
@@ -62,9 +74,9 @@ export default function MicrositeForm({ data, setData, errors, onSubmit, isEditi
                     type="file"
                     name="logo"
                     className="mt-1 block w-full"
-                    onChange={(e) => setData("logo", e.target.files[0])}
+                    onChange={(e) => setData("logo", e.target.files![0])}
                 />
-                <InputError message={errors.logo} className="mt-2" />
+                <InputError message={errors.logo + ''} className="mt-2" />
             </div>
 
             <div className="mt-4">

@@ -1,15 +1,16 @@
 import Pagination from "@/Components/Pagination";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
+import { IndexProps, Category } from "@/types/category";
 import { Button } from "@headlessui/react";
 import { Head, Link, router } from "@inertiajs/react";
 import { useState } from "react";
 
-export default function Index({ auth, categories, success }) {
+export default function Index({ auth, categories, success }: Readonly<IndexProps>) {
 
     const [showSuccessMessage, setShowSuccessMessage] = useState(!!success);
 
-    const deleteCategory = (category) => {
-        if (!window.confirm('Are you sure you want to delete the category?')){
+    const deleteCategory = (category: Category) => {
+        if (!window.confirm('Are you sure you want to delete the category?')) {
             return false;
         }
 
@@ -52,7 +53,7 @@ export default function Index({ auth, categories, success }) {
                                 <tbody>
                                     {categories.data.map((category, index) => (
                                         <tr key={category.id} className="bg-white border-b dark:boder-gray-700">
-                                            <td className="px-3 py-2">{index+1}</td>
+                                            <td className="px-3 py-2">{index + 1}</td>
                                             <td className="px-3 py-2">{category.name}</td>
                                             <td className="px-3 py-2">
                                                 <Link

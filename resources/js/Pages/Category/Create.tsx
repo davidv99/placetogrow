@@ -1,13 +1,14 @@
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { Head, useForm } from "@inertiajs/react";
 import Form from "./Components/Form";
+import { IndexProps } from "@/types/category";
 
-export default function Create({ auth }) {
+export default function Create({ auth }: Readonly<IndexProps>) {
     const { data, setData, post, errors } = useForm({
         name: "",
     });
 
-    const onSubmit = (e) => {
+    const onSubmit = (e: { preventDefault: () => void; }) => {
         e.preventDefault();
         post(route("category.store"));
     };

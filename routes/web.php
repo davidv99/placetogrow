@@ -17,7 +17,7 @@ Route::get('/', function () {
 });
 
 Route::middleware(['auth', 'verified'])->group(function () {
-    Route::get('/dashboard', fn () => Inertia::render('Dashboard'))->name('dashboard');
+    Route::get('/dashboard', fn() => Inertia::render('Dashboard'))->name('dashboard');
     Route::resource('category', CategoryController::class);
     Route::resource('microsite', MicrositeController::class);
 });
@@ -28,4 +28,4 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';
