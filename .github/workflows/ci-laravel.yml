@@ -67,8 +67,8 @@ jobs:
 
       - name: Run tests with coverage
         run: |
-          mkdir -p tests/_output
-          php artisan test --log-junit tests/_output/test-results.xml --coverage-clover tests/_output/coverage.xml
+          mkdir -p results
+          php artisan test --log-junit results/test-results.xml --coverage-clover results/coverage.xml
 
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@v2.2.0

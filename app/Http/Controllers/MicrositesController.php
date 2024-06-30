@@ -40,7 +40,7 @@ class MicrositesController extends Controller
     public function showAll()
     {
         $microsites = Microsites::with('category')->get();
-        return Inertia::render('Microsites/Index', compact('microsites'));;
+        return Inertia::render('Microsites/Index', compact('microsites'));
     }
 
     public function create()
