@@ -7,6 +7,7 @@ use App\Models\Category;
 use App\Models\Microsites;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Log;
 use Spatie\Permission\Models\Permission;
 use Tests\TestCase;
 
@@ -22,7 +23,7 @@ class MicrositesShowTest extends TestCase
 
     public function testItCanSeeShowSite(): void
     {
-
+        $this->withoutExceptionHandling();
         $user = User::factory()->create();
         $permission = Permission::firstOrCreate(['name' => PermissionSlug::MICROSITES_VIEW]);
         $user->givePermissionTo($permission);
@@ -36,7 +37,7 @@ class MicrositesShowTest extends TestCase
 
                 ]
             );
-
+        Log::info($microsite);
         $response = $this->actingAs($user)
             ->get(route('microsites.show', $microsite->id));
         $response->assertOk();
