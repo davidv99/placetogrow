@@ -2,7 +2,9 @@
 
 namespace Tests\Feature\Microsites;
 
+use App\Constants\Currency;
 use App\Constants\DocumentTypes;
+use App\Constants\MicrositesTypes;
 use App\Constants\PermissionSlug;
 use App\Models\Category;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -31,56 +33,43 @@ class MicrositesUpdateTest extends TestCase
         $this->withoutExceptionHandling();
         //The slug field is required.
         $category = Category::factory()->create();
-        $microsite = Microsites::factory()
-            ->for($category)
-            ->create(
-                [
-                    'name' => 'test-name',
-                    'slug' => 'test-slug',
-                    'document_number' => '123456789',
-                    'category_id' => $category->id,
-                ]
-            );
+
         $user = User::factory()->create();
         $permission = Permission::firstOrCreate(['name' => PermissionSlug::MICROSITES_UPDATE]);
         $user->givePermissionTo($permission);
 
+        $microsite = Microsites::factory()
+            ->for($category)
+            ->for($user)
+            ->create(
+                [
+                    'name' => 'test-name',
+                    'slug' => 'test-slug',
+                    'category_id' => $category->id,
+                    'document_type' => DocumentTypes::CC->name,
+                    'document_number' => '123456789',
+                    'logo' => 'test-logo',
+                    'currency' => Currency::COP->name,
+                    'site_type' => MicrositesTypes::Donation->name,
+                    'payment_expiration' => 10,
+                ]
+            );
+
         $response = $this->actingAs($user)
             ->put(route('microsites.update', $microsite->id), [
+                'id' => $microsite->id,
                 'name' => 'test-name-updated',
                 'slug' => 'test-slug-updated',
+                'document_type' => DocumentTypes::CC->name,
                 'document_number' => '123456789',
                 'category_id' => $category->id,
+                'logo' => 'test-logo',
+                'currency' => Currency::COP->name,
+                'site_type' => MicrositesTypes::Invoice->name,
+                'payment_expiration' => 10,
             ]);
 
         $response->assertRedirect(route('microsites.index'));
-        
+        $response->assertSessionHas('success', 'Sitio actualizado correctamente.');
     }
-
-    // public function testItCanSeeCreateFormSites(): void
-    // {
-    //     $response = $this->actingAs($User = User::factory()->create())
-    //         ->get(route('microsites.create'));
-    //     $response->assertOk();
-    //     $response->assertViewIs('microsites.create');
-    // }
-
-    // public function testItCanStoreSite(): void
-    // {
-    //     $this->withoutExceptionHandling();
-    //     $microsite = Microsites::factory()
-    //         ->for(Category::factory()->create())
-    //         ->make();
-    //     $user = User::factory()->create();
-    //     #imprimir microservice
-    //     $response = $this->actingAs($user)
-    //         ->post(route('microsites.store'), $microsite->toArray());
-
-    //     $response->assertRedirect(route('microsites.index'));
-
-    //     $this->assertDatabaseHas('microsites', [
-    //         'name' => $microsite->name,
-            
-    //     ]);
-    // }
 }

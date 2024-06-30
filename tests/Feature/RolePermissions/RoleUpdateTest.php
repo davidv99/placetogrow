@@ -31,7 +31,7 @@ class RoleUpdateTest extends TestCase
             ->put(route('admin.users.update', $user->id), ['role' => $role->id]);
 
 
-        $response->assertRedirect(route('rolePermission.index'));
+        $response->assertRedirect(route('users.index'));
         $this->assertTrue($user->fresh()->hasRole('client'));
     }
 }

@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Actions\RolePermissions\EditPermissionsAction;
-use App\Actions\RolePermissions\UpdatePermissionsAction;
 use App\Actions\RolePermissions\UpdateRolesAction;
 use App\Constants\PolicyName;
 use App\Models\User;
@@ -48,6 +47,6 @@ class RolePermissionController extends Controller
         $this->authorize(PolicyName::UPDATE, $user);
         $roles = $request->input('role', []);
         $updateRolesAction->execute($user, $roles);
-        return redirect()->route('rolePermission.index')->with('success', 'El rol del usuario ha sido actualizado correctamente.');
+        return redirect()->route('users.index')->with('success', 'El rol del usuario ha sido actualizado correctamente.');
     }
 }

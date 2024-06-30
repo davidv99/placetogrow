@@ -9,15 +9,16 @@ class StoreAction
     public function execute(array $data): Microsites
     {
         $microsite = new Microsites();
-        $microsite->category_id = $data['category_id'];
         $microsite->slug = $data['slug'];
         $microsite->name = $data['name'];
+        $microsite->category_id = $data['category_id'];
         $microsite->document_type = $data['document_type'];
         $microsite->document_number = $data['document_number'];
-        $microsite->logo = 'https://www.eafit.edu.co/estudiantes/feriaempleo/PublishingImages/logos/evertec-logo.jpg';
-        $microsite->currency = 'COP';
-        $microsite->site_type = 'Invoice';
-        $microsite->enabled_at = now();
+        $microsite->logo = $data['logo'];
+        $microsite->currency = $data['currency'];
+        $microsite->site_type = $data['site_type'];
+        $microsite->payment_expiration = $data['payment_expiration'];
+        $microsite->user_id = $data['user_id'];
         $microsite->save();
 
         return $microsite;
