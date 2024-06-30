@@ -17,7 +17,7 @@ class CategoryFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => $this->faker->company(15),
+            'name' => substr($this->faker->company(), 0, 20),
         ];
     }
 }

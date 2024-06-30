@@ -11,18 +11,30 @@ use App\Http\Requests\StoremicrositesRequest;
 use App\Http\Requests\UpdatemicrositesRequest;
 use Illuminate\Http\RedirectResponse;
 use App\Actions\Microsites\StoreAction;
+use App\Actions\Microsites\UpdateAction;
 use App\Constants\Currency;
 use App\Constants\MicrositesTypes;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
+use Spatie\Permission\Models\Role;
 
 class MicrositesController extends Controller
 {
     public function index()
-    {
-        $this->authorize(PolicyName::VIEW_ANY, Microsites::class);
+{
+    $this->authorize(PolicyName::VIEW_ANY, Microsites::class);
+    
+    $user = User::find(Auth::user()->id);
+    
+    if ($user->hasRole('Admin')) {
         $microsites = Microsites::all();
-        return view('microsites.index', compact('microsites'));
+    } else {
+        $microsites = Microsites::where('user_id', $user->id)->get();
     }
+    
+    return view('microsites.index', compact('microsites'));
+}
 
     public function create()
     {
@@ -45,12 +57,18 @@ class MicrositesController extends Controller
 
     public function show(microsites $microsite)
     {
+        
         $this->authorize(PolicyName::VIEW, $microsite);
+        $user = Auth::user();
+        if ($microsite->user_id !== $user->id) {
+            abort(403, 'Unauthorized action.');
+        }
         return view('microsites.show', compact('microsite'));
     }
 
     public function edit(microsites $microsite, Category $category)
     {
+        
         $this->authorize(PolicyName::UPDATE, $microsite);
         $categories = Category::query()->select('id', 'name')->get();
         $documentTypes = DocumentTypes::cases();
@@ -58,17 +76,14 @@ class MicrositesController extends Controller
         return view('microsites.edit', compact('microsite', 'categories', 'documentTypes'));
     }
 
-    public function update(UpdatemicrositesRequest $request, microsites $microsite): RedirectResponse
+    public function update(UpdatemicrositesRequest $request, microsites $microsite, UpdateAction $updateAction): RedirectResponse
     {
         $this->authorize(PolicyName::UPDATE, $microsite);
-        $request->validate([
-            'category_id' => 'required',
-            'slug' => 'required|max:50',
-            'name' => 'required|max:100',
-        ]);
+        $data = $request->validated();
+        $data['id'] = $microsite->id;
+        $updateAction->execute($data);
 
-        $microsite->update($request->all());
-        return redirect()->route('microsites.index');
+        return redirect()->route('microsites.index') ->with('success', 'Sitio actualizado correctamente.');
     }
 
     public function destroy(microsites $microsite, DeleteAction $deleteAction): RedirectResponse

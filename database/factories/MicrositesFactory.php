@@ -24,15 +24,15 @@ class MicrositesFactory extends Factory
     public function definition(): array
     {
         return [
-            'slug' => fake()->unique()->text(20),
-            'name' => $this->faker->company(),
+            'slug' => substr($this->faker->company(), 0, 20),
+            'name' => substr($this->faker->company(), 0, 30),
             'document_type' => $this->faker->randomElement(array_column(DocumentTypes::cases(), 'name')),
             'document_number' => $this->faker->numerify('###########'),
             'logo' => $this->faker->imageUrl(),
             'category_id' => Category::all()->random()->id,
             'currency' => $this->faker->randomElement(array_column(Currency::cases(), 'name')),
             'payment_expiration' => $this->faker->numberBetween(1, 30),
-            'user_id' => User::factory()->create()->id,
+            'user_id' => User::factory(),
             'site_type' => $this->faker->randomElement(array_column(MicrositesTypes::cases(), 'name')),
         ];
     }

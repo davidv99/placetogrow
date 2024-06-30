@@ -5,8 +5,6 @@ namespace App\Policies;
 use App\Constants\PermissionSlug;
 use App\Models\User;
 use App\Models\Microsites;
-use Illuminate\Auth\Access\Response;
-use Illuminate\Support\Facades\Log;
 
 class MicrositesPolicy
 {
@@ -30,6 +28,10 @@ class MicrositesPolicy
 
     public function update(User $user, Microsites $microsites): bool
     {
+
+        if ($microsites->user_id !== $user->id && !$user->hasRole('Admin')) {
+            abort(403, 'Unauthorized action.');
+        }
         return $user->hasPermissionTo(PermissionSlug::MICROSITES_UPDATE);
     }
 
@@ -38,8 +40,4 @@ class MicrositesPolicy
         return $user->hasPermissionTo(PermissionSlug::MICROSITES_DELETE);
     }
 
-    public function restore(User $user, Microsites $microsites): bool
-    {
-        return $user->hasPermissionTo(PermissionSlug::MICROSITES_UPDATE);
-    }
 }

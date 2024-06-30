@@ -96,7 +96,7 @@
                 </div>
 
                 <div class="mb-4">
-                    <label for="payment_expiration" class="block text-gray-700">Expiración del pago (días)</label>
+                    <label for="payment_expiration" class="block text-gray-700">Expiración del pago (Minutos)</label>
                     <input type="number" name="payment_expiration" id="payment_expiration"
                         class="w-full border-gray-300 rounded" required>
                     @error('payment_expiration')

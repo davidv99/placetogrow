@@ -23,21 +23,22 @@ class MicrositesIndexTest extends TestCase
     public function testItCanListSites(): void
     {
         $this->withoutExceptionHandling();
-        Microsites::factory()
+
+        $user = User::factory()->create();
+        $permission = Permission::firstOrCreate(['name' => PermissionSlug::MICROSITES_VIEW_ANY]);
+        $user->givePermissionTo($permission);
+        $microsite = Microsites::factory()
             ->for(Category::factory()->create())
+            ->for(($user))
             ->create(
                 [
                     'name' => 'test-name',
 
                 ]
             );
-        $user = User::factory()->create();
-        $permission = Permission::firstOrCreate(['name' => PermissionSlug::MICROSITES_VIEW_ANY]);
-        $user->givePermissionTo($permission);
         $response = $this->actingAs($user)
             ->get(route('microsites.index'));
         $response->assertOk();
         $response->assertSee('test-name');
     }
-
 }

@@ -22,19 +22,21 @@ class MicrositesShowTest extends TestCase
 
     public function testItCanSeeShowSite(): void
     {
-        Microsites::factory()
+
+        $user = User::factory()->create();
+        $permission = Permission::firstOrCreate(['name' => PermissionSlug::MICROSITES_VIEW]);
+        $user->givePermissionTo($permission);
+
+        $microsite = Microsites::factory()
             ->for(Category::factory()->create())
+            ->for(($user))
             ->create(
                 [
                     'name' => 'test-name',
 
                 ]
             );
-        $user = User::factory()->create();
-        $permission = Permission::firstOrCreate(['name' => PermissionSlug::MICROSITES_VIEW]);
-        $user->givePermissionTo($permission);
 
-        $microsite = Microsites::first();
         $response = $this->actingAs($user)
             ->get(route('microsites.show', $microsite->id));
         $response->assertOk();
