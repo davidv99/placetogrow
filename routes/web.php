@@ -1,8 +1,38 @@
 <?php
 
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\SiteController;
+use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
 Route::get('/', function () {
-    return Inertia::render('Welcome');
+    return Inertia::render('Welcome', [
+        'canLogin' => Route::has('login'),
+        'canRegister' => Route::has('register'),
+        'laravelVersion' => Application::VERSION,
+        'phpVersion' => PHP_VERSION,
+    ]);
 });
+
+Route::get('/dashboard', function () {
+    return Inertia::render('Dashboard');
+})->middleware(['auth', 'verified'])->name('dashboard');
+
+Route::middleware('auth')->group(function () {
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+});
+
+Route::prefix('dashboard')->middleware('auth')->group(function () {
+    Route::get('sites', [SiteController::class, 'index'])->name('site.index');
+    Route::get('sites/create', [SiteController::class, 'create'])->name('site.create');
+    Route::post('sites/create', [SiteController::class, 'store'])->name('site.store');
+    Route::get('sites/{site}', [SiteController::class, 'show'])->name('site.show');
+    Route::get('sites/{site}/edit', [siteController::class, 'edit'])->name('site.edit');
+    Route::post('sites/{site}', [SiteController::class, 'update'])->name('site.update');
+    Route::delete('sites/{site}', [SiteController::class, 'destroy'])->name('site.destroy');
+});
+
+require __DIR__.'/auth.php';
