@@ -39,37 +39,39 @@ jobs:
         with:
           php-version: 8.3
 
-      - name: Check PHP
+      - name: Check PHP Version
         run: php -v
 
-      - name: run composer install
+      - name: Install Composer Dependencies
         run: composer install
 
-      - name: Copy
+      - name: Copy Environment File
         run: cp .env.example .env
 
-      - name: Generate application key
+      - name: Generate Application Key
         run: php artisan key:generate
 
       - name: Set up Node.js
         uses: actions/setup-node@v4.0.2
         with:
           node-version: '20'
-      
-      - name: run npm install
+
+      - name: Install NPM Dependencies
         run: npm install
 
-      - name: Build assets
+      - name: Build Assets with Vite
         run: npm run build
 
-      - name: Migrate database
-        run: php artisan migrate
+      - name: Migrate Database
+        run: php artisan migrate --force
 
       - name: Run tests with coverage
-        run: php artisan test --coverage-clover=coverage.xml
+        run: |
+          mkdir -p tests/_output
+          php artisan test --log-junit test-results.xml --coverage-clover --coverage-clover=coverage.xml
 
       - name: SonarCloud Scan
-        uses: SonarSource/sonarcloud-github-action@master
+        uses: SonarSource/sonarcloud-github-action@v2.2.0
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
