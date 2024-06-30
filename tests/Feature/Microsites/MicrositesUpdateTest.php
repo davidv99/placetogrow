@@ -50,7 +50,7 @@ class MicrositesUpdateTest extends TestCase
                     'document_number' => '123456789',
                     'logo' => 'test-logo',
                     'currency' => Currency::COP->name,
-                    'site_type' => MicrositesTypes::Donation->name,
+                    'site_type' => MicrositesTypes::Donaciones->name,
                     'payment_expiration' => 10,
                 ]
             );
@@ -65,7 +65,7 @@ class MicrositesUpdateTest extends TestCase
                 'category_id' => $category->id,
                 'logo' => 'test-logo',
                 'currency' => Currency::COP->name,
-                'site_type' => MicrositesTypes::Invoice->name,
+                'site_type' => MicrositesTypes::Donaciones->name,
                 'payment_expiration' => 10,
             ]);
 

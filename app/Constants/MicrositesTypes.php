@@ -4,7 +4,7 @@ namespace App\Constants;
 
 enum MicrositesTypes
 {
-    case Invoice;
-    case Donation;
-    case Subscription;
+    case Facturas;
+    case Donaciones;
+    case Subscripciones;
 }

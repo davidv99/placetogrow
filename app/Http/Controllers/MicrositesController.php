@@ -17,24 +17,31 @@ use App\Constants\MicrositesTypes;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
+use Inertia\Inertia;
 use Spatie\Permission\Models\Role;
 
 class MicrositesController extends Controller
 {
     public function index()
-{
-    $this->authorize(PolicyName::VIEW_ANY, Microsites::class);
-    
-    $user = User::find(Auth::user()->id);
-    
-    if ($user->hasRole('Admin')) {
-        $microsites = Microsites::all();
-    } else {
-        $microsites = Microsites::where('user_id', $user->id)->get();
+    {
+        $this->authorize(PolicyName::VIEW_ANY, Microsites::class);
+
+        $user = User::find(Auth::user()->id);
+
+        if ($user->hasRole('Admin')) {
+            $microsites = Microsites::all();
+        } else {
+            $microsites = Microsites::where('user_id', $user->id)->get();
+        }
+
+        return view('microsites.index', compact('microsites'));
     }
-    
-    return view('microsites.index', compact('microsites'));
-}
+
+    public function showAll()
+    {
+        $microsites = Microsites::with('category')->get();
+        return Inertia::render('Microsites/Index', compact('microsites'));;
+    }
 
     public function create()
     {
@@ -57,7 +64,7 @@ class MicrositesController extends Controller
 
     public function show(microsites $microsite)
     {
-        
+
         $this->authorize(PolicyName::VIEW, $microsite);
         $user = Auth::user();
         if ($microsite->user_id !== $user->id) {
@@ -68,7 +75,7 @@ class MicrositesController extends Controller
 
     public function edit(microsites $microsite, Category $category)
     {
-        
+
         $this->authorize(PolicyName::UPDATE, $microsite);
         $categories = Category::query()->select('id', 'name')->get();
         $documentTypes = DocumentTypes::cases();
@@ -83,7 +90,7 @@ class MicrositesController extends Controller
         $data['id'] = $microsite->id;
         $updateAction->execute($data);
 
-        return redirect()->route('microsites.index') ->with('success', 'Sitio actualizado correctamente.');
+        return redirect()->route('microsites.index')->with('success', 'Sitio actualizado correctamente.');
     }
 
     public function destroy(microsites $microsite, DeleteAction $deleteAction): RedirectResponse
