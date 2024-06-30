@@ -73,6 +73,14 @@ class MicrositesController extends Controller
         return view('microsites.show', compact('microsite'));
     }
 
+    public function showMicrosite($slug, $id)
+    {
+        $microsite = Microsites::with('category')->findOrFail($id);
+        return Inertia::render('Microsites/Show', [
+            'microsite' => $microsite,
+        ]);
+    }
+
     public function edit(microsites $microsite, Category $category)
     {
 

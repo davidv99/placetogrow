@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Str;
 use League\CommonMark\Node\Block\Document;
 use App\Constants\DocumentTypes;
 use App\Constants\Currency;
@@ -23,8 +24,10 @@ class MicrositesFactory extends Factory
     
     public function definition(): array
     {
+        $companyName = $this->faker->company();
+        $slug = Str::slug($companyName, '-');
         return [
-            'slug' => substr($this->faker->company(), 0, 20),
+            'slug' => substr($slug , 0, 20),
             'name' => substr($this->faker->company(), 0, 30),
             'document_type' => $this->faker->randomElement(array_column(DocumentTypes::cases(), 'name')),
             'document_number' => $this->faker->numerify('###########'),
