@@ -59,7 +59,7 @@ class SitePll extends PersistantLowLevel
 
     public static function update_site(Site $site, $data)
     {
-        if(array_key_exists('image', $data)){
+        if (array_key_exists('image', $data)) {
             $site->update([
                 'slug' => $data['slug'],
                 'name' => $data['name'],
@@ -71,7 +71,7 @@ class SitePll extends PersistantLowLevel
                 'site_type' => $data['site_type'],
                 'image' => $data['image'],
             ]);
-        }else{
+        } else {
             $site->update([
                 'slug' => $data['slug'],
                 'name' => $data['name'],
@@ -90,11 +90,13 @@ class SitePll extends PersistantLowLevel
         $site->delete();
     }
 
-    public static function save_cache(string $name, $data){
+    public static function save_cache(string $name, $data)
+    {
         Cache::put($name, $data);
     }
 
-    public static function get_cache(string $name){
+    public static function get_cache(string $name)
+    {
         return Cache::get($name);
     }
 

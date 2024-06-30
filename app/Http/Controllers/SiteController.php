@@ -102,7 +102,7 @@ class SiteController extends Controller
             'site_type' => $request['site_type'],
         ];
 
-        if($request->hasFile('image')) {
+        if ($request->hasFile('image')) {
             if (Storage::exists(str_replace('storage', 'public', $site->image))) {
                 Storage::delete(str_replace('storage', 'public', $site->image));
             }
@@ -118,7 +118,7 @@ class SiteController extends Controller
 
         SitePll::forget_cache('site.'.$site->id);
         SitePll::forget_cache('sites.index');
-        
+
         return redirect()->route('sites.index')
             ->with('status', 'Site updated successfully')
             ->with('class', 'bg-green-500');
@@ -162,7 +162,7 @@ class SiteController extends Controller
             preg_match('/^enum\((.*)\)$/', $enumDocumentTypeValues, $matches);
             $document_types = explode(',', $matches[1]);
             $document_types = array_map(fn ($value) => trim($value, "'"), $document_types);
-            
+
             SitePll::save_cache('categories', $categories);
             SitePll::save_cache('current_options', $current_options);
             SitePll::save_cache('site_type_options', $site_type_options);
